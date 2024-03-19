@@ -3,7 +3,9 @@ import java.sql.*;
 public class Main {
     public static void main(String[] args) throws SQLException {
         Main app = new Main();
-        app.connectToOracle();
+        System_Menu menu = new System_Menu();
+        menu.show_display();
+//        app.connectToOracle();
     }
 
     // Connect to Oracle JDBC
