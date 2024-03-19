@@ -1,3 +1,5 @@
+package Menu_Pages;
+
 public interface Menu {
 
     public void show_display();

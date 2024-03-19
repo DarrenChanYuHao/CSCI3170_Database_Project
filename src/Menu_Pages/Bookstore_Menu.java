@@ -1,5 +1,9 @@
+package Menu_Pages;
+
 import java.util.Date;
 import java.util.Scanner;
+import Builders.String_Builder;
+import Handlers.Option_Handler;
 
 public class Bookstore_Menu implements Menu {
 
@@ -18,25 +22,8 @@ public class Bookstore_Menu implements Menu {
     @Override
     public void choose_option() {
 
-        System.out.println("Please enter your choice??..");
-
-        // Get user input from 1 to 5
-        Scanner choice_Scanner = new Scanner(System.console().reader());
-        int user_input = 0;
-
-        while (user_input < 1 || user_input > 4) {
-            try {
-                user_input = choice_Scanner.nextInt();
-                if (user_input < 1 || user_input > 5) {
-                    System.out.println("Invalid input. Please enter a number from 1 to 4.");
-                }
-            } catch (Exception e) {
-                System.out.println("Invalid input. Please enter a number from 1 to 4.");
-                choice_Scanner.nextLine();
-            }
-        }
-
-        choice_Scanner.close();
+        Option_Handler optionHandler = new Option_Handler();
+        int user_input = optionHandler.get_options(4);
 
         // Switch case for user input
         switch (user_input){
