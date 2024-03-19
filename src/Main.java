@@ -1,4 +1,4 @@
-import Menu_Pages.Main_Menu;
+import Menu_Pages.*;
 
 import java.sql.*;
 

@@ -11,14 +11,14 @@ public class Option_Handler {
         Scanner choice_Scanner = new Scanner(System.console().reader());
         int user_input = 0;
 
-        while (user_input < 1 || user_input > 4) {
+        while (user_input < 1 || user_input > num_of_options) {
             try {
                 user_input = choice_Scanner.nextInt();
                 if (user_input < 1 || user_input > 5) {
-                    System.out.println("Invalid input. Please enter a number from 1 to 4.");
+                    System.out.println("Invalid input. Please enter a number from 1 to" + num_of_options + ".");
                 }
             } catch (Exception e) {
-                System.out.println("Invalid input. Please enter a number from 1 to 4.");
+                System.out.println("Invalid input. Please enter a number from 1 to" + num_of_options + ".");
                 choice_Scanner.nextLine();
             }
         }
