@@ -2,10 +2,10 @@ import java.sql.*;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        Main app = new Main();
-        System_Menu menu = new System_Menu();
+        // Main app = new Main();
+        Main_Menu menu = new Main_Menu();
         menu.show_display();
-//        app.connectToOracle();
+        // app.connectToOracle();
     }
 
     // Connect to Oracle JDBC
