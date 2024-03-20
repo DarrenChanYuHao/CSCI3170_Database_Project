@@ -1,7 +1,6 @@
 package Menu_Pages;
 
 import java.util.Date;
-import java.util.Scanner;
 import Builders.String_Builder;
 import Handlers.Option_Handler;
 
@@ -13,8 +12,8 @@ public class Bookstore_Menu implements Menu {
     public void show_display() {
         String_Builder bookstore_menu = new String_Builder.Build_String().setMenuName("Bookstore_Menu").build();
 
-        System.out.println(bookstore_menu.getMenuHeaders());
-        System.out.println(bookstore_menu.getMenuOptionsList());
+        System.out.println(bookstore_menu.getMajorMenuHeaders());
+        System.out.println(bookstore_menu.getMajorMenuOptionsList());
 
         choose_option();
     }
@@ -28,16 +27,13 @@ public class Bookstore_Menu implements Menu {
         // Switch case for user input
         switch (user_input){
             case 1:
-                // TODO Bookstore Menu 1: Order Update
-                System.out.println("Order Update.");
+                orderUpdate();
                 break;
             case 2:
-                // TODO Bookstore Menu 2: Order Query
-                System.out.println("Order Query.");
+                orderQuery();
                 break;
             case 3:
-                // TODO Bookstore Menu 3: N most Popular Book Query
-                System.out.println("N most Popular Book Query.");
+                nMostPopularBookQuery();
                 break;
             case 4:
                 // Back to main menu
@@ -47,13 +43,29 @@ public class Bookstore_Menu implements Menu {
         }
     }
 
-    @Override
-    public void quit_current_menu() {
-
+    public void orderUpdate(){
+        // TODO Bookstore Menu 1: Order Update
+        System.out.println("Please Input your order ID: ");
+        // do some sort of read
+        // display details
+        System.out.println("Are you sure to update the shipping status? (Yes=Y)");
+        // do some sort of read
+        // update the shipping status
+        System.out.println("Updated shipping status");
     }
 
-    public void buildString(String[] StrArr){
+    public void orderQuery(){
+        // TODO Bookstore Menu 2: Order Query
+        System.out.println("Please input the Month for Order Query (e.g.2005-09):");
+        // do some sort of read
+        // display details
+    }
 
+    public void nMostPopularBookQuery(){
+        // TODO Bookstore Menu 3: N most Popular Book Query
+        System.out.println("Please input the N popular book number:");
+        // do some sort of read
+        // display details
     }
 
 }

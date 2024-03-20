@@ -1,6 +1,5 @@
 package Menu_Pages;
 
-import java.util.Scanner;
 import Builders.String_Builder;
 import Handlers.Option_Handler;
 
@@ -11,8 +10,8 @@ public class System_Menu implements Menu {
         
         String_Builder system_menu = new String_Builder.Build_String().setMenuName("System_Menu").build();
 
-        System.out.println(system_menu.getMenuHeaders());
-        System.out.println(system_menu.getMenuOptionsList());
+        System.out.println(system_menu.getMajorMenuHeaders());
+        System.out.println(system_menu.getMajorMenuOptionsList());
         choose_option();
     }
 
@@ -25,20 +24,16 @@ public class System_Menu implements Menu {
         // Switch case for user input
         switch (user_input){
             case 1:
-                // TODO System Menu 1: Create Table
-                System.out.println("Create Table.");
+                createTable();
                 break;
             case 2:
-                // TODO System Menu 2: Delete Table
-                System.out.println("Delete Table.");
+                deleteTable();
                 break;
             case 3:
-                // TODO System Menu 3: Insert Data
-                System.out.println("Insert Data.");
+                insertData();
                 break;
             case 4:
-                // TODO System Menu 4: Set System Date
-                System.out.println("Set System Date.");
+                setSystemDate();
                 break;
             case 5:
                 // Back to main menu
@@ -51,8 +46,31 @@ public class System_Menu implements Menu {
         }
     }
 
-    @Override
-    public void quit_current_menu() {
-
+    public void createTable(){
+        // TODO System Menu 1: Create Table
+        System.out.println("Create Table.");
     }
+
+    public void deleteTable(){
+        // TODO System Menu 2: Delete Table
+        System.out.println("Delete Table.");
+    }
+
+    public void insertData(){
+        // TODO System Menu 3: Insert Data
+        System.out.println("Please enter the folder path");
+        // do some sort of read
+        System.out.println("Processing...");
+        // once done
+        System.out.println("Data is loaded!");
+    }
+
+    public void setSystemDate(){
+        // TODO System Menu 4: Set System Date
+        System.out.println("Please Input the date (YYYYMMDD) : ");
+        // do some sort of read
+        // process input
+    }
+
+
 }

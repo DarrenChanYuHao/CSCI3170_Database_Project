@@ -1,7 +1,6 @@
 package Menu_Pages;
 
 import java.sql.Date;
-import java.util.Scanner;
 import Builders.String_Builder;
 import Handlers.Option_Handler;
 
@@ -12,15 +11,15 @@ public class Main_Menu implements Menu{
         // Dummy Date Variable
         Date system_time;
 
-        system_time = getSystemTime();
+        system_time = getSystemDate();
 
         String_Builder main_menu = new String_Builder.Build_String()
                 .setMenuName("Main_Menu")
                 .build();
 
         System.out.println("The System Date is now:" + system_time);
-        System.out.println(main_menu.getMenuHeaders());
-        System.out.println(main_menu.getMenuOptionsList());
+        System.out.println(main_menu.getMajorMenuHeaders());
+        System.out.println(main_menu.getMajorMenuOptionsList());
         choose_option();
     }
 
@@ -49,11 +48,11 @@ public class Main_Menu implements Menu{
                 break;
             case 4:
                 // Show System Date
-                System.out.println("Show System Date.");
+                getSystemDate();
                 break;
             case 5:
                 // Quit the system
-                System.out.println("Quit the system......");
+                System.exit(0);
                 break;
             default:
                 // Invalid input
@@ -62,23 +61,11 @@ public class Main_Menu implements Menu{
         }
     }
 
-    @Override
-    public void quit_current_menu() {
-
-    }
-
-    public void buildString(String[] StrArr){
-
-    }
-
-
-
     // Dummy Method for getting the system time
-    // TODO: Replace with actual system time method
-    public Date getSystemTime(){
+    // TODO Main Menu 1: Replace with actual system time method
+    public Date getSystemDate(){
         Date system_time = new Date(System.currentTimeMillis());
 
         return system_time;
     }
-
 }
