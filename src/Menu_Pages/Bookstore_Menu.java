@@ -6,10 +6,22 @@ import Handlers.Option_Handler;
 
 public class Bookstore_Menu implements Menu {
 
+    /*
+     * This class is to be used for the bookstore menu displays and operations.
+     */
+
     Date system_time;
 
     @Override
     public void show_display() {
+        /*
+         *    This method is to be used to display the bookstore menu. Once called, it will display
+         *    the bookstore menu and call the choose_option method to prompt the user to choose an option.
+         *
+         *    Input: None
+         *    Output: None
+         */
+    
         String_Builder bookstore_menu = new String_Builder.Build_String().setMenuName("Bookstore_Menu").build();
 
         System.out.println(bookstore_menu.getMajorMenuHeaders());
@@ -20,9 +32,22 @@ public class Bookstore_Menu implements Menu {
 
     @Override
     public void choose_option() {
+        /*
+         *    This method is to be used to prompt the user to choose an option from the bookstore menu.
+         *    Once the user has chosen an option, it will call the corresponding method.
+         *
+         *    The options are:
+         *    1. Order Update
+         *    2. Order Query
+         *    3. N most Popular Book Query
+         *    4. Back to Main Menu
+         *
+         *    Input: None
+         *    Output: None
+         */
 
         Option_Handler optionHandler = new Option_Handler();
-        int user_input = optionHandler.get_options(4);
+        int user_input = optionHandler.get_userinput_menu_options(4);
 
         // Switch case for user input
         switch (user_input){

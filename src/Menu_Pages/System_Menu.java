@@ -19,7 +19,7 @@ public class System_Menu implements Menu {
     public void choose_option() {
 
         Option_Handler optionHandler = new Option_Handler();
-        int user_input = optionHandler.get_options(5);
+        int user_input = optionHandler.get_userinput_menu_options(5);
 
         // Switch case for user input
         switch (user_input){

@@ -5,9 +5,21 @@ import Builders.String_Builder;
 import Handlers.Option_Handler;
 
 public class Main_Menu implements Menu{
+    /*
+     * This class is to be used for the main menu displays and operations.
+     */
 
     @Override
     public void show_display() {
+
+        /*
+        *    This method is to be used to display the main menu. Once called, it will display 
+        *    the main menu and call the choose_option method to prompt the user to choose an option.
+        *
+        *    Input: None
+        *    Output: None    
+        */
+
         // Dummy Date Variable
         Date system_time;
 
@@ -26,8 +38,23 @@ public class Main_Menu implements Menu{
     @Override
     public void choose_option() {
 
+        /*
+        *    This method is to be used to prompt the user to choose an option from the main menu.
+        *    Once the user has chosen an option, it will call the corresponding method.
+        *
+        *    The options are:
+        *    1. System Interface
+        *    2. Customer Interface
+        *    3. Bookstore Interface
+        *    4. Show System Date
+        *    5. Quit the system
+        *
+        *    Input: None
+        *    Output: None    
+        */
+
         Option_Handler optionHandler = new Option_Handler();
-        int user_input = optionHandler.get_options(5);
+        int user_input = optionHandler.get_userinput_menu_options(5);
 
         // Switch case for user input
         switch (user_input){

@@ -4,9 +4,20 @@ import Builders.String_Builder;
 import Handlers.Option_Handler;
 
 public class Customer_Menu implements Menu{
+    /*
+    * This class is to be used for the customer menu displays and operations.
+    */
 
     @Override
     public void show_display() {
+        /*
+        *    This method is to be used to display the customer menu. Once called, it will display
+        *    the customer menu and call the choose_option method to prompt the user to choose an option.
+        *
+        *    Input: None
+        *    Output: None
+        */
+
         String_Builder customer_menu = new String_Builder.Build_String().setMenuName("Customer_Menu").build();
         
         System.out.println(customer_menu.getMajorMenuHeaders());
@@ -16,9 +27,23 @@ public class Customer_Menu implements Menu{
 
     @Override
     public void choose_option() {
+        /*
+        *    This method is to be used to prompt the user to choose an option from the customer menu.
+        *    Once the user has chosen an option, it will call the corresponding method.
+        *    
+        *    The options are:
+        *    1. Book Search
+        *    2. Order Creation
+        *    3. Order Alteration
+        *    4. Order Query
+        *    5. Back to Main Menu
+        *
+        *    Input: None
+        *    Output: None
+        */
 
         Option_Handler optionHandler = new Option_Handler();
-        int user_input = optionHandler.get_options(5);
+        int user_input = optionHandler.get_userinput_menu_options(5);
 
         // Switch case for user input
         switch (user_input){

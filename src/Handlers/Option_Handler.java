@@ -4,10 +4,23 @@ import java.util.Scanner;
 
 public class Option_Handler {
 
-    public int get_options(int num_of_options){
+    /*
+     * This class is to be used for all option handling operations.
+     */
+
+    public int get_userinput_menu_options(int num_of_options){
+
+        /*
+         *    This method is to be used to prompt the user to choose a numerical option from either a menu or submenu.
+         *    Once the user has chosen an option, it will return the user input.
+         * 
+         *    Input: num_of_options
+         *    Output: user_input
+         */
+
         System.out.println("Please enter your choice??..");
 
-        // Get user input from 1 to 5
+        // Get user input from 1 to num_of_options
         Scanner choice_Scanner = new Scanner(System.console().reader());
         int user_input = 0;
 
