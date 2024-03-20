@@ -42,7 +42,7 @@ public class String_Builder {
         }
     }
 
-    public String getMenuOptionsList(){
+    public String getMajorMenuOptionsList(){
         String options_List_String = null;
 
         switch (menu_name){
@@ -73,13 +73,15 @@ public class String_Builder {
                                                 "3. N most Popular Book Query." + "\n" +
                                                 "4. Back to main menu.";
                                                 break;
+
             default:
-                options_List_String = "Invalid Menu Name.";}
+                options_List_String = "Invalid Menu Name.";
+            }
 
         return options_List_String;
     }
 
-    public String getMenuHeaders(){
+    public String getMajorMenuHeaders(){
         String header_String = null;
 
         switch (menu_name){
@@ -100,13 +102,42 @@ public class String_Builder {
                                 "-----------------------------------";
                 break;
             default:
-                header_String = "Invalid Menu Name.";}
+                header_String = "Invalid Menu Name.";
+            }
 
         return header_String;
     }
 
-    public String getSubMenu(){
-        //TODO String_Builder 1: Submenu
-        return "This is the sub menu.";
+    public String getSubMenuOptionsList(){
+
+        String options_List_String = null;
+
+        switch (menu_name){
+            case "BookSearch_Menu":
+                options_List_String =   "1. ISBN." + "\n" +
+                                        "2. Book Title." + "\n" +
+                                        "3. Author Name." + "\n" +
+                                        "4. Exit.";
+                                        break;
+
+            default:
+                options_List_String = "Invalid Menu Name.";
+            }
+            
+        return options_List_String;
+    }
+
+    public String getSubMenuHeaders(){
+        String header_String = null;
+
+        switch (menu_name){
+            case "BookSearch_Menu":
+                header_String = "What do you want to search";
+                break;
+            default:
+                header_String = "Invalid Menu Name.";
+            }
+
+        return header_String;
     }
 }
