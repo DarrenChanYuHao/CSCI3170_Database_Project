@@ -60,13 +60,44 @@ public class System_Operations {
         try {
             // Read all files in the folder
             List<String> FilePaths = getFilePathfromFolder(folderPath);
-            List<String> FileLines = readLinesfromFile(FilePaths.get(2));
-            FileLines.forEach(System.out::println);
-            String entityType = getEntityTypesfromLine(FileLines.get(0));
-            System.out.println(entityType);
-            // Read lines in each file
-            Entity_Model_Interface entity = new Book_Model("1-1234-1234-1","Database I", 100, 50);
-            entity.insertinDatabase(conn);
+
+            // For each file, read the lines
+            for (String filePath : FilePaths) {
+                List<String> FileLines = readLinesfromFile(filePath);
+                String entityType = getEntityTypesfromLine(FileLines.get(0));
+                
+                for (String line : FileLines) {
+                    List<String> data = getDatafromLine(line);
+
+                // Insert data depending on the entity type
+                switch (entityType) {
+                    case "book":
+                        Entity_Model_Interface book = new Book_Model(data.get(0), data.get(1), Integer.parseInt(data.get(2)), Integer.parseInt(data.get(3)));
+                        book.insertinDatabase(conn);
+                        break;
+                    case "customers":
+                        Entity_Model_Interface customer = new Customer_Model(data.get(0), data.get(1), data.get(2), data.get(3));
+                        customer.insertinDatabase(conn);
+                        break;
+                    // case "orders":
+                    //     Entity_Model_Interface order = new Order_Model();
+                    //     order.insertinDatabase(conn);
+                    //     break;
+                    // case "ordering":
+                    //     Entity_Model_Interface ordering = new Ordering_Model();
+                    //     ordering.insertinDatabase(conn);
+                    //     break;
+                    // case "book_author":
+                    //     Entity_Model_Interface book_author = new Book_Author_Model();
+                    //     book_author.insertinDatabase(conn);
+                    //     break;
+                    // default:
+                    //     System.out.println("Invalid entity type.");
+                    //     break;
+                }
+                }
+
+            }
             System.out.println("Data successfully inserted.");
             // Insert data into the SQL database
         }
@@ -133,5 +164,11 @@ public class System_Operations {
         else {
             return "Invalid";
         }
+    }
+
+    public List<String> getDatafromLine(String line) {
+        // Get Data from Line
+        List<String> data = List.of(line.split("\\|"));
+        return data;
     }
 }
