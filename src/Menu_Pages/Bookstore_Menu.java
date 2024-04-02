@@ -4,6 +4,7 @@ import java.util.Date;
 import Builders.String_Builder;
 import Handlers.Option_Handler;
 import Model.Database;
+import java.util.Scanner;
 
 public class Bookstore_Menu implements Menu {
 
@@ -89,10 +90,12 @@ public class Bookstore_Menu implements Menu {
     public void orderQuery(){
         // TODO Bookstore Menu 2: Order Query
         System.out.println("Please input the Month for Order Query (e.g.2005-09):");
+        
         // do some sort of read
-        String user_input = "Whatever";
+        Scanner choice_Scanner = new Scanner(System.console().reader());
+        String input = choice_Scanner.nextLine();
 
-        db.book_store_operations("order query", user_input);
+        db.book_store_operations("order query", input);
         // display details
     }
 
