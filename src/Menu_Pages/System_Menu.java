@@ -2,8 +2,22 @@ package Menu_Pages;
 
 import Builders.String_Builder;
 import Handlers.Option_Handler;
+import Model.Database;
 
 public class System_Menu implements Menu {
+
+    /*
+     * This class is to be used for the system menu displays and operations.
+     */
+
+    // Attributes
+    private Database db;
+
+    // Constructor
+    public System_Menu(Database db) {
+        // Initialise Database
+        this.db = db;    
+    }
 
     @Override
     public void show_display() {
@@ -37,7 +51,7 @@ public class System_Menu implements Menu {
                 break;
             case 5:
                 // Back to main menu
-                Main_Menu main_menu = new Main_Menu();
+                Main_Menu main_menu = new Main_Menu(this.db);
                 main_menu.show_display();
                 break;
             default:
@@ -49,11 +63,13 @@ public class System_Menu implements Menu {
     public void createTable(){
         // TODO System Menu 1: Create Table
         System.out.println("Create Table.");
+        db.system_operations("createTable");
     }
 
     public void deleteTable(){
         // TODO System Menu 2: Delete Table
         System.out.println("Delete Table.");
+        db.system_operations("deleteTable");
     }
 
     public void insertData(){

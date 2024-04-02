@@ -8,11 +8,41 @@ public class Database {
  */
 
     Connection conn;
+    String[] tableNames = {"book", "customer", "orders", "ordering", "book_author"};
+    String[] tableColumn = {"(ISBN int, title varchar(50), unit_price int, no_of_copies int)",
+                            "(customer_id int, name varchar(50), shipping_address varchar(50), credit_card_no int)",
+                            "(order_id int, o_date date, shipping_status varchar(50), charge float, customer_id int)",
+                            "(order_id int, ISBN int, quantity int)",
+                            "(ISBN int, author_name varchar(50))"};
+
+    // enum for table names
+    public enum TableNames {
+        book, customer, orders, ordering, book_author
+    }
+
+    // enum for table columns
+    public enum TableColumns {
+        book("(ISBN int, title varchar(50), unit_price int, no_of_copies int)"),
+        customer("(customer_id int, name varchar(50), shipping_address varchar(50), credit_card_no int)"),
+        orders("(order_id int, o_date date, shipping_status varchar(50), charge float, customer_id int)"),
+        ordering("(order_id int, ISBN int, quantity int)"),
+        book_author("(ISBN int, author_name varchar(50)");
+
+        private final String column;
+
+        TableColumns(String column) {
+            this.column = column;
+        }
+
+        public String getColumn() {
+            return column;
+        }
+    }
 
     public Database() throws SQLException {
     }
 
-    public void connectToOracle() throws SQLException {
+    public Connection connectToOracle() throws SQLException {
     /*
      *    This method is to be used to connect to the Oracle database.
      *    Input: None
@@ -28,6 +58,8 @@ public class Database {
         catch (ClassNotFoundException e) {
             System.out.println("Could not load the driver" + e.getException());
         }
+
+        return conn;
     }
     
     public void sampleInsert() throws SQLException {
@@ -71,6 +103,32 @@ public class Database {
         }
         catch (SQLException e) {
             System.out.println( e.getErrorCode());
+        }
+    }
+
+    public void system_operations(String operation){
+        /*
+        *    This method is to be used to call the system operations class.
+        *    Input: None
+        *    Output: None    
+        */
+        
+        System_Operations sys_ops = new System_Operations(conn);
+        
+        switch (operation){
+            case "createTable":
+                sys_ops.createTable(tableNames, tableColumn);
+                break;
+            case "deleteTable":
+                sys_ops.deleteTable(tableNames);
+                break;
+            case "insertData":
+                sys_ops.insertData();
+                break;
+            case "setdate":
+                sys_ops.setSystemDate();
+                break;
+
         }
     }
 }

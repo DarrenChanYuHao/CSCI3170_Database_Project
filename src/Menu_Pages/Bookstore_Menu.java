@@ -3,6 +3,7 @@ package Menu_Pages;
 import java.util.Date;
 import Builders.String_Builder;
 import Handlers.Option_Handler;
+import Model.Database;
 
 public class Bookstore_Menu implements Menu {
 
@@ -11,6 +12,12 @@ public class Bookstore_Menu implements Menu {
      */
 
     Date system_time;
+    private Database db;
+
+    public Bookstore_Menu(Database db) {
+        // Initialise Database
+        this.db = db;    
+    }
 
     @Override
     public void show_display() {
@@ -62,7 +69,7 @@ public class Bookstore_Menu implements Menu {
                 break;
             case 4:
                 // Back to main menu
-                Main_Menu main_menu = new Main_Menu();
+                Main_Menu main_menu = new Main_Menu(this.db);
                 main_menu.show_display();
                 break;
         }
