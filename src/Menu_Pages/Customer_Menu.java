@@ -2,11 +2,21 @@ package Menu_Pages;
 
 import Builders.String_Builder;
 import Handlers.Option_Handler;
+import Model.Database;
 
 public class Customer_Menu implements Menu{
     /*
     * This class is to be used for the customer menu displays and operations.
     */
+
+    // Attributes
+    private Database db;
+
+    // Constructor
+    public Customer_Menu(Database db) {
+        // Initialise Database
+        this.db = db;    
+    }
 
     @Override
     public void show_display() {
@@ -61,7 +71,7 @@ public class Customer_Menu implements Menu{
                 break;
             case 5:
                 // Back to main menu
-                Main_Menu main_menu = new Main_Menu();
+                Main_Menu main_menu = new Main_Menu(this.db);
                 main_menu.show_display();
                 break;
         }

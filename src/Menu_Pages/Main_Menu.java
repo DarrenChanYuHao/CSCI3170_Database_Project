@@ -1,5 +1,6 @@
 package Menu_Pages;
 
+import Model.*;
 import java.sql.Date;
 import Builders.String_Builder;
 import Handlers.Option_Handler;
@@ -8,6 +9,15 @@ public class Main_Menu implements Menu{
     /*
      * This class is to be used for the main menu displays and operations.
      */
+
+    // Attributes
+    private Database db;
+
+    // Constructor
+    public Main_Menu(Database db) {
+        // Initialise Database
+        this.db = db;    
+    }
 
     @Override
     public void show_display() {
@@ -60,17 +70,17 @@ public class Main_Menu implements Menu{
         switch (user_input){
             case 1:
                 // System Menu
-                System_Menu system_menu = new System_Menu();
+                System_Menu system_menu = new System_Menu(this.db);
                 system_menu.show_display();
                 break;
             case 2:
                 // Customer Menu
-                Customer_Menu customer_menu = new Customer_Menu();
+                Customer_Menu customer_menu = new Customer_Menu(this.db);
                 customer_menu.show_display();
                 break;
             case 3:
                 // Bookstore Menu
-                Bookstore_Menu bookstore_menu = new Bookstore_Menu();
+                Bookstore_Menu bookstore_menu = new Bookstore_Menu(this.db);
                 bookstore_menu.show_display();
                 break;
             case 4:
