@@ -3,6 +3,7 @@ package Menu_Pages;
 import Builders.String_Builder;
 import Handlers.Option_Handler;
 import Model.Database;
+import oracle.net.aso.d;
 
 public class System_Menu implements Menu {
 
@@ -12,11 +13,13 @@ public class System_Menu implements Menu {
 
     // Attributes
     private Database db;
+    Option_Handler optionHandler;
 
     // Constructor
     public System_Menu(Database db) {
         // Initialise Database
-        this.db = db;    
+        this.db = db;
+        optionHandler = new Option_Handler();
     }
 
     @Override
@@ -31,8 +34,6 @@ public class System_Menu implements Menu {
 
     @Override
     public void choose_option() {
-
-        Option_Handler optionHandler = new Option_Handler();
         int user_input = optionHandler.get_userinput_menu_options(5);
 
         // Switch case for user input
@@ -75,8 +76,16 @@ public class System_Menu implements Menu {
     public void insertData(){
         // TODO System Menu 3: Insert Data
         System.out.println("Please enter the folder path");
+
         // do some sort of read
+        String user_input = optionHandler.get_user_input_string();
+        
+        // TO REMOVE:
+        // Use dummy path
+        user_input = "C:\\Users\\littl\\IdeaProjects\\Database_Project\\test_data";
+
         System.out.println("Processing...");
+        db.system_operations("insertData", user_input);
         // once done
         System.out.println("Data is loaded!");
     }

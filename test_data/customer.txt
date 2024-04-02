@@ -1,0 +1,8 @@
+adafu|Ada|222,Shatin,Hong Kong|4444-4444-4444-4444
+cwwong|Raymond|123,Shatin,Hong Kong|1234-1234-1234-1234
+hndai|Henry|567,Shatin,Hong Kong|1111-1111-1111-1111
+hyyue|Willy|234,Kwai Chung,Hong Kong|4321-4321-4321-4321
+raymond|Raymond Wong|999,Tai Wai,Hong Kong|9999-9999-9999-9999
+twleung|Oscar|890,Tin Shui Wai,Hong Kong|2222-2222-2222-2222
+wcliew|Alan|333,Tsuen Wan,Hong Kong|5555-5555-5555-5555
+xcai|Teresa|111,Shatin,Hong Kong|3333-3333-3333-3333

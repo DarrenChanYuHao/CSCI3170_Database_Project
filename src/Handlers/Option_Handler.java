@@ -8,6 +8,14 @@ public class Option_Handler {
      * This class is to be used for all option handling operations.
      */
 
+    Scanner choice_Scanner;
+
+    // Constructor
+    public Option_Handler() {
+        choice_Scanner = new Scanner(System.console().reader());
+    }
+
+
     public int get_userinput_menu_options(int num_of_options){
 
         /*
@@ -35,6 +43,25 @@ public class Option_Handler {
                 choice_Scanner.nextLine();
             }
         }
+
+        choice_Scanner.close();
+
+        return user_input;
+    }
+
+    public String get_user_input_string() {
+
+        /*
+         *    This method is to be used to prompt the user to enter a string.
+         *    Once the user has entered a string, it will return the user input.
+         * 
+         *    Input: None
+         *    Output: user_input
+         */
+
+         // Get user input from 1 to num_of_options
+        Scanner choice_Scanner = new Scanner(System.console().reader());
+        String user_input = choice_Scanner.nextLine();
 
         choice_Scanner.close();
 
