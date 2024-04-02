@@ -39,8 +39,8 @@ public class BookStore_Operations {
                     System.out.println();
                     i+=1;
                 }
-                System.out.println("Total charges of the month is " + sum);
             }
+            System.out.println("Total charges of the month is " + sum);
         } 
         catch (SQLException e) {
             System.out.println( e.getErrorCode());
