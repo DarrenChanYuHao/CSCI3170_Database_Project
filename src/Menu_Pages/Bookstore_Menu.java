@@ -13,6 +13,7 @@ public class Bookstore_Menu implements Menu {
 
     Date system_time;
     private Database db;
+    Option_Handler optionHandler = new Option_Handler();
 
     public Bookstore_Menu(Database db) {
         // Initialise Database
@@ -53,7 +54,6 @@ public class Bookstore_Menu implements Menu {
          *    Output: None
          */
 
-        Option_Handler optionHandler = new Option_Handler();
         int user_input = optionHandler.get_userinput_menu_options(4);
 
         // Switch case for user input
@@ -90,8 +90,10 @@ public class Bookstore_Menu implements Menu {
         // TODO Bookstore Menu 2: Order Query
         System.out.println("Please input the Month for Order Query (e.g.2005-09):");
         // do some sort of read
-        String user_input = "Whatever";
-
+        String user_input = optionHandler.get_user_input_string("YYYY-MM");
+        
+        // Dummy Data
+        user_input = "2005-09";
         db.book_store_operations("order query", user_input);
         // display details
     }

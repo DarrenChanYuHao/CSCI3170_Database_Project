@@ -78,7 +78,7 @@ public class System_Menu implements Menu {
         System.out.println("Please enter the folder path");
 
         // do some sort of read
-        String user_input = optionHandler.get_user_input_string();
+        String user_input = optionHandler.get_user_input_string("folder path");
         
         // TO REMOVE:
         // Use dummy path
