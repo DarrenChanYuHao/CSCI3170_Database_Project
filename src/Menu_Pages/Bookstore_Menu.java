@@ -91,9 +91,6 @@ public class Bookstore_Menu implements Menu {
         System.out.println("Please input the Month for Order Query (e.g.2005-09):");
         // do some sort of read
         String user_input = optionHandler.get_user_input_string("YYYY-MM");
-        
-        // Dummy Data
-        user_input = "2005-09";
         db.book_store_operations("order query", user_input);
         // display details
     }
