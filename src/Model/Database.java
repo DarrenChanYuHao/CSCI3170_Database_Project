@@ -72,7 +72,7 @@ public class Database {
             ResultSet rs = stmt.executeQuery( query );
             // loop through result tuples (rs is a cursor)
             while ( rs.next() ) {
-                String s = rs.getString( "name" );
+                String  = rs.getString( "name" );
                 int n = rs.getInt( "rating" );
                 System.out.println( s + " " + n );
             }
@@ -83,7 +83,7 @@ public class Database {
     }
 
 
-    // For System Opertions
+    // For System Operations
     // ========================================================================================================
     public void system_operations(String operation){
         /*
@@ -133,7 +133,7 @@ public class Database {
         
         switch (operation){
             case "order query":
-                bs_ops.orderQuery();
+                bs_ops.orderQuery(user_input);
                 break;
         }
     }
