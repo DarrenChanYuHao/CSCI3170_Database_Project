@@ -1,6 +1,8 @@
 package Handlers;
 
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class Option_Handler {
 
@@ -49,7 +51,7 @@ public class Option_Handler {
         return user_input;
     }
 
-    public String get_user_input_string() {
+    public String get_user_input_string(String Verify_Type) {
 
         /*
          *    This method is to be used to prompt the user to enter a string.
@@ -63,8 +65,37 @@ public class Option_Handler {
         Scanner choice_Scanner = new Scanner(System.console().reader());
         String user_input = choice_Scanner.nextLine();
 
+        if (Verify_Type.equals("YYYY-MM")){
+
+            // The date format needs to use mini caps for the year due to the SimpleDateFormat class.
+            while (!date_format_checker(user_input, "yyyy-MM")) {
+                System.out.println("Invalid input. Please enter a date in the format YYYY-MM.");
+                user_input = choice_Scanner.nextLine();
+            }
+        }
+
         choice_Scanner.close();
 
         return user_input;
+    }
+
+    public boolean date_format_checker(String date, String Date_Format) {
+        /*
+         *    This method is to be used to check if the date is in the correct format.
+         *    Once the date has been checked, it will return a boolean value.
+         * 
+         *    Input: String date, String Date_Format
+         *    Output: boolean
+         */
+
+        SimpleDateFormat dateFormatChecker = new SimpleDateFormat(Date_Format);
+        dateFormatChecker.setLenient(false);
+
+        try {
+            dateFormatChecker.parse(date);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
