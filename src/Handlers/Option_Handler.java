@@ -1,5 +1,9 @@
 package Handlers;
 
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -74,6 +78,13 @@ public class Option_Handler {
             }
         }
 
+        if (Verify_Type.equals("folder path")){
+            while (!isValidPath(user_input)) {
+                System.out.println("Invalid input. Please enter a valid folder path.");
+                user_input = choice_Scanner.nextLine();
+            }
+        }
+
         choice_Scanner.close();
 
         return user_input;
@@ -97,5 +108,19 @@ public class Option_Handler {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static boolean isValidPath(String path) {
+    // https://stackoverflow.com/questions/468789/is-there-a-way-in-java-to-determine-if-a-path-is-valid-without-attempting-to-cre
+    // https://www.baeldung.com/java-file-directory-exists#:~:text=To%20check%20if%20a%20file,that%20Path%20to%20the%20Files.    
+        try {
+            Path real_path = Paths.get(path);
+            if (!Files.exists(real_path)) {
+                return false;
+            }
+        } catch (InvalidPathException | NullPointerException ex) {
+            return false;
+        }
+        return true;
     }
 }

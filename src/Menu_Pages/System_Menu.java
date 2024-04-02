@@ -78,11 +78,12 @@ public class System_Menu implements Menu {
         System.out.println("Please enter the folder path");
 
         // do some sort of read
-        String user_input = optionHandler.get_user_input_string("folder path");
+        // TO UNCOMMENT WHEN SUBMITTING:!!!!!
+        //String user_input = optionHandler.get_user_input_string("folder path");
         
         // TO REMOVE:
         // Use dummy path
-        user_input = "C:\\Users\\littl\\IdeaProjects\\Database_Project\\test_data";
+        String user_input = "C:\\Users\\littl\\IdeaProjects\\Database_Project\\test_data";
 
         System.out.println("Processing...");
         db.system_operations("insertData", user_input);
