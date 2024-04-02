@@ -37,51 +37,7 @@ public class Database {
 
         return conn;
     }
-    
-    public void sampleInsert() throws SQLException {
-        /*
-        *    This method is a sample method to insert a new tuple into the Sailors table for testing purposes.
-        *    Input: None
-        *    Output: None    
-        */
-    
-        try {
-            PreparedStatement pstmt =
-                    conn.prepareStatement( "insert into Sailors values (?,?,?)" );
-            pstmt.setInt ( 1, 0 );
-            pstmt.setString ( 2, "Myint" );
-            pstmt.setInt ( 3, 7 );
-            pstmt.execute();
-        }
-        catch (SQLException e) {
-            System.out.println( e.getErrorCode());
-        }
-    }
-
-    public void sampleQuery() throws SQLException {
-        /*
-        *    This method is a sample method to query the Sailors table for testing purposes.
-        *    Input: None
-        *    Output: None    
-        */
-
-        try {
-            // Sample code from Lecture.
-            Statement stmt = conn.createStatement();
-            String query = "SELECT * FROM Sailors";
-            ResultSet rs = stmt.executeQuery( query );
-            // loop through result tuples (rs is a cursor)
-            while ( rs.next() ) {
-                String  = rs.getString( "name" );
-                int n = rs.getInt( "rating" );
-                System.out.println( s + " " + n );
-            }
-        }
-        catch (SQLException e) {
-            System.out.println( e.getErrorCode());
-        }
-    }
-
+     
 
     // For System Operations
     // ========================================================================================================
