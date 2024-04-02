@@ -90,6 +90,9 @@ public class Bookstore_Menu implements Menu {
         // TODO Bookstore Menu 2: Order Query
         System.out.println("Please input the Month for Order Query (e.g.2005-09):");
         // do some sort of read
+        String user_input = "Whatever";
+
+        db.book_store_operations("order query", user_input);
         // display details
     }
 
