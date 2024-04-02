@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,32 +70,33 @@ public class System_Operations {
                 for (String line : FileLines) {
                     List<String> data = getDatafromLine(line);
 
-                // Insert data depending on the entity type
-                switch (entityType) {
-                    case "book":
-                        Entity_Model_Interface book = new Book_Model(data.get(0), data.get(1), Integer.parseInt(data.get(2)), Integer.parseInt(data.get(3)));
-                        book.insertinDatabase(conn);
-                        break;
-                    case "customers":
-                        Entity_Model_Interface customer = new Customer_Model(data.get(0), data.get(1), data.get(2), data.get(3));
-                        customer.insertinDatabase(conn);
-                        break;
-                    // case "orders":
-                    //     Entity_Model_Interface order = new Order_Model();
-                    //     order.insertinDatabase(conn);
-                    //     break;
-                    // case "ordering":
-                    //     Entity_Model_Interface ordering = new Ordering_Model();
-                    //     ordering.insertinDatabase(conn);
-                    //     break;
-                    // case "book_author":
-                    //     Entity_Model_Interface book_author = new Book_Author_Model();
-                    //     book_author.insertinDatabase(conn);
-                    //     break;
-                    // default:
-                    //     System.out.println("Invalid entity type.");
-                    //     break;
-                }
+                    // Insert data depending on the entity type
+                    switch (entityType) {
+                        case "book":
+                            Entity_Model_Interface book = new Book_Model(data.get(0), data.get(1), Integer.parseInt(data.get(2)), Integer.parseInt(data.get(3)));
+                            book.insertinDatabase(conn);
+                            break;
+                        case "customers":
+                            Entity_Model_Interface customer = new Customer_Model(data.get(0), data.get(1), data.get(2), data.get(3));
+                            customer.insertinDatabase(conn);
+                            break;
+                        case "orders":
+                            Date date = Date.valueOf(data.get(1));
+                            Entity_Model_Interface order = new Order_model(data.get(0), date, data.get(2), Integer.parseInt(data.get(3)), data.get(4));
+                            order.insertinDatabase(conn);
+                            break;
+                        case "ordering":
+                            Entity_Model_Interface ordering = new Ordering_model(data.get(0), data.get(1), Integer.parseInt(data.get(2)));
+                            ordering.insertinDatabase(conn);
+                            break;
+                        case "book_author":
+                            Entity_Model_Interface book_author = new BookAuthor_Model(data.get(0), data.get(1));
+                            book_author.insertinDatabase(conn);
+                            break;
+                        default:
+                            System.out.println("Invalid entity type.");
+                            break;
+                    }
                 }
 
             }

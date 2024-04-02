@@ -42,7 +42,7 @@ public class Ordering_model implements Entity_Model_Interface{
     public void insertinDatabase(Connection conn) {
         // Insert into database
         try {
-            PreparedStatement pstmt = conn.prepareStatement("insert into book values(?,?,?)");
+            PreparedStatement pstmt = conn.prepareStatement("insert into ordering values(?,?,?)");
             pstmt.setString(1, this.order_id);
             pstmt.setString(2, this.isbn);
             pstmt.setInt(3, this.quantity);

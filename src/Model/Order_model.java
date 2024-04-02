@@ -1,6 +1,8 @@
 package Model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Arrays;
 import java.sql.Date;
 
 public class Order_model implements Entity_Model_Interface{
@@ -14,9 +16,9 @@ public class Order_model implements Entity_Model_Interface{
     private String customer_id;
 
 
-    public Order_model(String order_id, Date o_date, String shipping_status, int charge, String customer_id) {
+    public Order_model(String order_id, Date date, String shipping_status, int charge, String customer_id) {
         this.order_id = order_id;
-        this.o_date = o_date;
+        this.o_date = date;
         this.shipping_status = shipping_status;
         this.charge = charge;
         this.customer_id = customer_id;
@@ -61,16 +63,17 @@ public class Order_model implements Entity_Model_Interface{
     public void insertinDatabase(Connection conn) {
         // Insert into database
         try {
-            PreparedStatement pstmt = conn.prepareStatement("insert into book values(?,?,?,?,?)");
+            PreparedStatement pstmt = conn.prepareStatement("insert into orders values(?,?,?,?,?)");
             pstmt.setString(1, this.order_id);
             pstmt.setDate(2, this.o_date);
             pstmt.setString(3, this.shipping_status);
             pstmt.setInt(4, this.charge);
-            pstmt.setString(4, this.customer_id);
+            pstmt.setString(5, this.customer_id);
             pstmt.execute();
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             // TODO: handle exception
+            System.out.println("Error Code: " + e.getErrorCode());
         }
 
     }

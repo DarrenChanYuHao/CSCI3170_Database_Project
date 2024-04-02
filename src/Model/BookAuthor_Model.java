@@ -31,7 +31,7 @@ public class BookAuthor_Model implements Entity_Model_Interface{
     public void insertinDatabase(Connection conn) {
         // Insert into database
         try {
-            PreparedStatement pstmt = conn.prepareStatement("insert into book values(?,?)");
+            PreparedStatement pstmt = conn.prepareStatement("insert into book_author values(?,?)");
             pstmt.setString(1, this.isbn);
             pstmt.setString(2, this.author_name);
             pstmt.execute();
