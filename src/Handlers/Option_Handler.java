@@ -101,6 +101,13 @@ public class Option_Handler {
             }
         }
 
+        if (Verify_Type.equals("order ID")){
+            while (!Pattern.matches("[0-9]{8}", user_input)) {
+                System.out.println("Invalid input. Please enter a valid order ID.");
+                user_input = choice_Scanner.nextLine();
+            }
+        }
+
         choice_Scanner.close();
 
         return user_input;
