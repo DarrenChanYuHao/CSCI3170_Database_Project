@@ -37,53 +37,9 @@ public class Database {
 
         return conn;
     }
-    
-    public void sampleInsert() throws SQLException {
-        /*
-        *    This method is a sample method to insert a new tuple into the Sailors table for testing purposes.
-        *    Input: None
-        *    Output: None    
-        */
-    
-        try {
-            PreparedStatement pstmt =
-                    conn.prepareStatement( "insert into Sailors values (?,?,?)" );
-            pstmt.setInt ( 1, 0 );
-            pstmt.setString ( 2, "Myint" );
-            pstmt.setInt ( 3, 7 );
-            pstmt.execute();
-        }
-        catch (SQLException e) {
-            System.out.println( e.getErrorCode());
-        }
-    }
+     
 
-    public void sampleQuery() throws SQLException {
-        /*
-        *    This method is a sample method to query the Sailors table for testing purposes.
-        *    Input: None
-        *    Output: None    
-        */
-
-        try {
-            // Sample code from Lecture.
-            Statement stmt = conn.createStatement();
-            String query = "SELECT * FROM Sailors";
-            ResultSet rs = stmt.executeQuery( query );
-            // loop through result tuples (rs is a cursor)
-            while ( rs.next() ) {
-                String s = rs.getString( "name" );
-                int n = rs.getInt( "rating" );
-                System.out.println( s + " " + n );
-            }
-        }
-        catch (SQLException e) {
-            System.out.println( e.getErrorCode());
-        }
-    }
-
-
-    // For System Opertions
+    // For System Operations
     // ========================================================================================================
     public void system_operations(String operation){
         /*
@@ -122,20 +78,53 @@ public class Database {
 
     // For Book Store Operations
     // ========================================================================================================
-    public void book_store_operations(String operation, String user_input){
+    public int book_store_operations(String operation, String user_input){
         /*
         *    This method is to be used to call the book store operations class.
         *    Input: None
-        *    Output: None    
+        *    Output: (Only for order update (order ID))
+        *            0 - order status is Y (shipped)
+        *            1 - order status is N (not shipped) and quantity is more than 0 (Shipping Status can be updated)
+        *            2 - order status is N (not shipped) and quantity is 0 (TBC : Waiting for clarification from TA)
+        *            3 - order does not exist    
         */
         
         BookStore_Operations bs_ops = new BookStore_Operations(conn);
         
         switch (operation){
+            case "order update (order ID)":
+                int order_details = bs_ops.orderUpdate_getOrderDetails(user_input);
+                return order_details;
             case "order query":
                 bs_ops.orderQuery();
                 break;
+            
+            case "N most popular":
+                bs_ops.n_Most_Popular();
+                break;
         }
+
+        return 0;
     }
 
+    public int book_store_operations(String operation, String user_input, String user_input_2){
+        /*
+        *    This method is to be used to call the book store operations class.
+        *    This is overload for order update (update shipping status) as that requires 2 inputs (order_id, shipping_status).
+        *    Input: operations, user_input, user_input_2
+        *    Output: (Only for order update (update shipping status))
+        *            1 - Success
+        *            0 - Failure    
+        */
+        
+        BookStore_Operations bs_ops = new BookStore_Operations(conn);
+        
+        switch (operation){
+            case "order update (update shipping status)":
+                int success_status = bs_ops.orderUpdate_updateShippingStatus(user_input, user_input_2);
+                return success_status;
+        }        
+
+        return 0;
+    }
 }
