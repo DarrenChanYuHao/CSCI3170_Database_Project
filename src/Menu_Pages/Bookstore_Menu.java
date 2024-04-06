@@ -132,14 +132,14 @@ public class Bookstore_Menu implements Menu {
     }
 
     public void orderQuery(){
-        System.out.println("Please input the Month for Order Query (e.g.2005-09):");
-        db.book_store_operations("order query");
+        System.out.println("Please inputs the Month for Order Query (e.g.2005-09):");
+        db.book_store_operations("order query","");
     }
 
     public void nMostPopularBookQuery(){
         // TODO Bookstore Menu 3: N most Popular Book Query
         System.out.println("Please input the N popular book number:");
-        db.book_store_operations("N most popular");
+        db.book_store_operations("N most popular","");
     }
 
 }
