@@ -21,6 +21,32 @@ public class Option_Handler {
         choice_Scanner = new Scanner(System.console().reader());
     }
 
+    public int get_user_input_Int(int book_count) {
+        // This method collects user's input in the Integer datatype
+
+        Scanner choice_Scanner = new Scanner(System.console().reader());
+        int user_input = 0;
+        while (true) {
+            try {
+                user_input = choice_Scanner.nextInt();
+                if (user_input <= 0)
+                    System.out.println("Invalid input. Please enter an Integer.");
+                else if (user_input > book_count) {
+                    user_input = book_count;
+                    break;
+                }
+                else {
+                    break;
+                }
+            }
+            catch (Exception e) {
+                System.out.println("Invalid input. Please enter an Integer.");
+                choice_Scanner.nextLine();
+            }
+        }
+        choice_Scanner.close();
+        return user_input;
+    }
 
     public int get_userinput_menu_options(int num_of_options){
 

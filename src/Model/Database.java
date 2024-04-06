@@ -78,7 +78,7 @@ public class Database {
 
     // For Book Store Operations
     // ========================================================================================================
-    public void book_store_operations(String operation, String user_input){
+    public void book_store_operations(String operation){
         /*
         *    This method is to be used to call the book store operations class.
         *    Input: None
@@ -87,9 +87,13 @@ public class Database {
         
         BookStore_Operations bs_ops = new BookStore_Operations(conn);
         
-        switch (operation){
+        switch (operation) {
             case "order query":
-                bs_ops.orderQuery(user_input);
+                bs_ops.orderQuery();
+                break;
+            
+            case "N most popular":
+                bs_ops.n_Most_Popular();
                 break;
         }
     }

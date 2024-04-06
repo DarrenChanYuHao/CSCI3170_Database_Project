@@ -2,7 +2,6 @@ package Model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.sql.Date;
 
 public class Order_model implements Entity_Model_Interface{
