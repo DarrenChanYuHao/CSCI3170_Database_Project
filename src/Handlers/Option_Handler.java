@@ -81,14 +81,30 @@ public class Option_Handler {
         return user_input;
     }
 
+    public String get_user_input_string(){
+
+        /*
+         *    This method is to be used to prompt the user to enter a string when there is NO NEED for input validation.
+         *    Once the user has entered a string, it will return the user input.
+         * 
+         *    Input: None
+         *    Output: user_input
+         */
+
+        Scanner choice_Scanner = new Scanner(System.console().reader());
+        String user_input = choice_Scanner.nextLine();
+        choice_Scanner.close();
+        return user_input;
+    }
+
     public String get_user_input_string(String Verify_Type) {
 
         /*
          *    This method is to be used to prompt the user to enter a string.
          *    Once the user has entered a string, it will return the user input.
          * 
-         *    Input: None
-         *    Output: user_input
+         *    Input: String Verify Type
+         *    Output: String user_input
          */
 
          // Get user input from 1 to num_of_options
@@ -107,6 +123,13 @@ public class Option_Handler {
         if (Verify_Type.equals("folder path")){
             while (!isValidPath(user_input)) {
                 System.out.println("Invalid input. Please enter a valid folder path.");
+                user_input = choice_Scanner.nextLine();
+            }
+        }
+
+        if (Verify_Type.equals("order ID")){
+            while (!Pattern.matches("[0-9]{8}", user_input)) {
+                System.out.println("Invalid input. Please enter a valid order ID.");
                 user_input = choice_Scanner.nextLine();
             }
         }
