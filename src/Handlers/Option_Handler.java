@@ -68,10 +68,10 @@ public class Option_Handler {
             try {
                 user_input = choice_Scanner.nextInt();
                 if (user_input < 1 || user_input > 5) {
-                    System.out.println("Invalid input. Please enter a number from 1 to" + num_of_options + ".");
+                    System.out.println("Invalid input. Please enter a number from 1 to " + num_of_options + ".");
                 }
             } catch (Exception e) {
-                System.out.println("Invalid input. Please enter a number from 1 to" + num_of_options + ".");
+                System.out.println("Invalid input. Please enter a number from 1 to " + num_of_options + ".");
                 choice_Scanner.nextLine();
             }
         }

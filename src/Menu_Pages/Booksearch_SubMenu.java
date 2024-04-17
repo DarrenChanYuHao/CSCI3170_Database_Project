@@ -5,8 +5,8 @@ import Handlers.Option_Handler;
 
 import java.sql.*;
 import java.util.Scanner;
-
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 public class Booksearch_SubMenu implements Menu {
 
@@ -88,19 +88,19 @@ public class Booksearch_SubMenu implements Menu {
             while (resultSet.next()) {
                 if(currentISBN.equals(resultSet.getString("ISBN"))) {
                     authorCount++;
-                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                    System.out.println(authorCount + " :" + resultSet.getString("author_name"));
                 } else {
                     recordCount++;
                     authorCount = 1;
-                    System.out.println("\n");
+                    System.out.println("");
                     System.out.println("Record " + recordCount);
                     currentISBN = resultSet.getString("ISBN");
-                    System.out.println("\nISBN: " + currentISBN);
-                    System.out.println("\nBook Title:" + resultSet.getString("title"));
-                    System.out.println("\nUnit Price:" + resultSet.getDouble("uni_price"));
-                    System.out.println("\nNo. Of Available:" + resultSet.getInt("no_of_copies"));
-                    System.out.println("\nAuthors:");
-                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                    System.out.println("ISBN: " + currentISBN);
+                    System.out.println("Book Title:" + resultSet.getString("title"));
+                    System.out.println("Unit Price:" + resultSet.getDouble("uni_price"));
+                    System.out.println("No. Of Available:" + resultSet.getInt("no_of_copies"));
+                    System.out.println("Authors:");
+                    System.out.println(authorCount + " :" + resultSet.getString("author_name"));
                 }
             }
 
@@ -133,19 +133,19 @@ public class Booksearch_SubMenu implements Menu {
             while (resultSet.next()) {
                 if(currentISBN.equals(resultSet.getString("ISBN"))) {
                     authorCount++;
-                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                    System.out.println(authorCount + " :" + resultSet.getString("author_name"));
                 } else {
                     recordCount++;
                     authorCount = 1;
-                    System.out.println("\n");
-                    System.out.println("\nRecord " + recordCount);
+                    System.out.println("");
+                    System.out.println("Record " + recordCount);
                     currentISBN = resultSet.getString("ISBN");
-                    System.out.println("\nISBN: " + currentISBN);
-                    System.out.println("\nBook Title:" + resultSet.getString("title"));
-                    System.out.println("\nUnit Price:" + resultSet.getDouble("uni_price"));
-                    System.out.println("\nNo. Of Available:" + resultSet.getInt("no_of_copies"));
-                    System.out.println("\nAuthors:");
-                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                    System.out.println("ISBN: " + currentISBN);
+                    System.out.println("Book Title:" + resultSet.getString("title"));
+                    System.out.println("Unit Price:" + resultSet.getDouble("uni_price"));
+                    System.out.println("No. Of Available:" + resultSet.getInt("no_of_copies"));
+                    System.out.println("Authors:");
+                    System.out.println(authorCount + " :" + resultSet.getString("author_name"));
                 }
             }
 
@@ -178,19 +178,19 @@ public class Booksearch_SubMenu implements Menu {
             while (resultSet.next()) {
                 if(currentISBN.equals(resultSet.getString("ISBN"))) {
                     authorCount++;
-                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                    System.out.println(authorCount + " :" + resultSet.getString("author_name"));
                 } else {
                     recordCount++;
                     authorCount = 1;
-                    System.out.println("\n");
-                    System.out.println("\nRecord " + recordCount);
+                    System.out.println("");
+                    System.out.println("Record " + recordCount);
                     currentISBN = resultSet.getString("ISBN");
-                    System.out.println("\nISBN: " + currentISBN);
-                    System.out.println("\nBook Title:" + resultSet.getString("title"));
-                    System.out.println("\nUnit Price:" + resultSet.getDouble("uni_price"));
-                    System.out.println("\nNo. Of Available:" + resultSet.getInt("no_of_copies"));
-                    System.out.println("\nAuthors:");
-                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                    System.out.println("ISBN: " + currentISBN);
+                    System.out.println("Book Title:" + resultSet.getString("title"));
+                    System.out.println("Unit Price:" + resultSet.getDouble("uni_price"));
+                    System.out.println("No. Of Available:" + resultSet.getInt("no_of_copies"));
+                    System.out.println("Authors:");
+                    System.out.println(authorCount + " :" + resultSet.getString("author_name"));
                 }
             }
 
