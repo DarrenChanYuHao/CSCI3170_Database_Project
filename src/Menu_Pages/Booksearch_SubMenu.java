@@ -3,7 +3,14 @@ package Menu_Pages;
 import Builders.String_Builder;
 import Handlers.Option_Handler;
 
+import java.sql.*;
+import java.util.Scanner;
+
+
+
 public class Booksearch_SubMenu implements Menu {
+
+    private Connection conn;
 
     /*
      * This class is to be used for the book search submenu displays and operations.
@@ -63,23 +70,135 @@ public class Booksearch_SubMenu implements Menu {
 
     // I think this methods can be condensesd into one method but low priority. - Darren
     private void isbnSearch(){
-        // TODO Book Search 1: ISBN Search
-        System.out.println("Input the ISBN:");
-        // do some sort of read
-        // process the read
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Input the ISBN: ");
+            String isbn = scanner.nextLine();
+
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN = \'" + isbn + "\' ORDER BY b.title ASC, b.ISBN ASC, a.author_name ASC"
+            );
+            preparedStatement.setString(1, isbn);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            String currentISBN = "";
+            Integer recordCount = 0;
+            Integer authorCount = 0;
+
+            while (resultSet.next()) {
+                if(currentISBN.equals(resultSet.getString("ISBN"))) {
+                    authorCount++;
+                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                } else {
+                    recordCount++;
+                    authorCount = 1;
+                    System.out.println("\n");
+                    System.out.println("Record " + recordCount);
+                    currentISBN = resultSet.getString("ISBN");
+                    System.out.println("\nISBN: " + currentISBN);
+                    System.out.println("\nBook Title:" + resultSet.getString("title"));
+                    System.out.println("\nUnit Price:" + resultSet.getDouble("uni_price"));
+                    System.out.println("\nNo. Of Available:" + resultSet.getInt("no_of_copies"));
+                    System.out.println("\nAuthors:");
+                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                }
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void bookTitleSearch(){
-        // TODO Book Search 2: Book Title Search
-        System.out.println("Input the Book Title:");
-        // do some sort of read
-        // process the read
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Input the Book Title: ");
+            String title = scanner.nextLine();
+            
+            String cleanTitleString = title.replace("%", "").replace("_", "");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.title LIKE \'" + title + "\' ORDER BY CASE WHEN b.title = \'" + cleanTitleString + "\' THEN 0 ELSE 1 END, b.title ASC, b.ISBN ASC, a.author_name ASC;"
+            );
+            preparedStatement.setString(1, title);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            String currentISBN = "";
+            Integer recordCount = 0;
+            Integer authorCount = 0;
+
+            while (resultSet.next()) {
+                if(currentISBN.equals(resultSet.getString("ISBN"))) {
+                    authorCount++;
+                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                } else {
+                    recordCount++;
+                    authorCount = 1;
+                    System.out.println("\n");
+                    System.out.println("\nRecord " + recordCount);
+                    currentISBN = resultSet.getString("ISBN");
+                    System.out.println("\nISBN: " + currentISBN);
+                    System.out.println("\nBook Title:" + resultSet.getString("title"));
+                    System.out.println("\nUnit Price:" + resultSet.getDouble("uni_price"));
+                    System.out.println("\nNo. Of Available:" + resultSet.getInt("no_of_copies"));
+                    System.out.println("\nAuthors:");
+                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                }
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void authorNameSearch(){
-        // TODO Book Search 3: Author Name Search
-        System.out.println("Input the Author Name:");
-        // do some sort of read
-        // process the read
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Input the Author Name: ");
+            String authorName = scanner.nextLine();
+            
+            String cleanAuthorNameString = authorName.replace("%", "").replace("_", "");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name LIKE \'" + authorName + "\' ) ORDER BY CASE WHEN a.author_name = \'" + cleanAuthorNameString + "\' THEN 0 ELSE 1 END, b.title ASC, b.ISBN ASC, a.author_name ASC;"
+            );
+            preparedStatement.setString(1, authorName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            String currentISBN = "";
+            Integer recordCount = 0;
+            Integer authorCount = 0;
+
+            while (resultSet.next()) {
+                if(currentISBN.equals(resultSet.getString("ISBN"))) {
+                    authorCount++;
+                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                } else {
+                    recordCount++;
+                    authorCount = 1;
+                    System.out.println("\n");
+                    System.out.println("\nRecord " + recordCount);
+                    currentISBN = resultSet.getString("ISBN");
+                    System.out.println("\nISBN: " + currentISBN);
+                    System.out.println("\nBook Title:" + resultSet.getString("title"));
+                    System.out.println("\nUnit Price:" + resultSet.getDouble("uni_price"));
+                    System.out.println("\nNo. Of Available:" + resultSet.getInt("no_of_copies"));
+                    System.out.println("\nAuthors:");
+                    System.out.println("\n" + authorCount + " :" + resultSet.getString("author_name"));
+                }
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
