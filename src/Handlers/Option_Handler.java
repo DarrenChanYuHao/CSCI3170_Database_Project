@@ -18,17 +18,18 @@ public class Option_Handler {
 
     // Constructor
     public Option_Handler() {
-        choice_Scanner = new Scanner(System.console().reader());
+        choice_Scanner = new Scanner(System.in);
     }
 
     public int get_user_input_Int(int book_count) {
         // This method collects user's input in the Integer datatype
 
-        Scanner choice_Scanner = new Scanner(System.console().reader());
+        Scanner choice_Scanner = new Scanner(System.in);
         int user_input = 0;
         while (true) {
             try {
                 user_input = choice_Scanner.nextInt();
+                choice_Scanner.nextLine();
                 if (user_input <= 0)
                     System.out.println("Invalid input. Please enter an Integer.");
                 else if (user_input > book_count) {
@@ -43,13 +44,13 @@ public class Option_Handler {
                 System.out.println("Invalid input. Please enter an Integer.");
                 choice_Scanner.nextLine();
             }
+            
         }
-        choice_Scanner.close();
+        //choice_Scanner.close();
         return user_input;
     }
 
     public int get_userinput_menu_options(int num_of_options){
-
         /*
          *    This method is to be used to prompt the user to choose a numerical option from either a menu or submenu.
          *    Once the user has chosen an option, it will return the user input.
@@ -61,12 +62,24 @@ public class Option_Handler {
         System.out.println("Please enter your choice??..");
 
         // Get user input from 1 to num_of_options
-        Scanner choice_Scanner = new Scanner(System.console().reader());
+        Scanner choice_Scanner = new Scanner(System.in);
         int user_input = 0;
-
+        while (user_input < 1 || user_input > num_of_options) {
+            try {
+                user_input = Integer.parseInt(choice_Scanner.nextLine());
+                if (user_input < 1 || user_input > 5) {
+                    System.out.println("Invalid input. Please enter a number from 1 to " + num_of_options + ".");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number from 1 to " + num_of_options + ".");
+            }
+            
+        }
+        /* 
         while (user_input < 1 || user_input > num_of_options) {
             try {
                 user_input = choice_Scanner.nextInt();
+                choice_Scanner.nextLine();
                 if (user_input < 1 || user_input > 5) {
                     System.out.println("Invalid input. Please enter a number from 1 to " + num_of_options + ".");
                 }
@@ -74,10 +87,9 @@ public class Option_Handler {
                 System.out.println("Invalid input. Please enter a number from 1 to " + num_of_options + ".");
                 choice_Scanner.nextLine();
             }
-        }
+        }*/
 
-        choice_Scanner.close();
-
+        //choice_Scanner.close();
         return user_input;
     }
 
@@ -91,9 +103,9 @@ public class Option_Handler {
          *    Output: user_input
          */
 
-        Scanner choice_Scanner = new Scanner(System.console().reader());
+        Scanner choice_Scanner = new Scanner(System.in);
         String user_input = choice_Scanner.nextLine();
-        choice_Scanner.close();
+        //choice_Scanner.close();
         return user_input;
     }
 
@@ -108,7 +120,7 @@ public class Option_Handler {
          */
 
          // Get user input from 1 to num_of_options
-        Scanner choice_Scanner = new Scanner(System.console().reader());
+        Scanner choice_Scanner = new Scanner(System.in);
         String user_input = choice_Scanner.nextLine();
 
         if (Verify_Type.equals("YYYY-MM")){
@@ -134,7 +146,7 @@ public class Option_Handler {
             }
         }
 
-        choice_Scanner.close();
+        //choice_Scanner.close();
 
         return user_input;
     }
