@@ -98,8 +98,7 @@ public class Customer_Menu implements Menu{
             
             System.out.println("Please enter your customerID??");
             Scanner scanner = new Scanner(System.in);
-            String customerID;
-            customerID = scanner.nextLine();
+            String customerID = scanner.nextLine();
             preparedStatement = conn.prepareStatement(
                 "SELECT customer_id FROM customer WHERE customer_id = ?"
             );
@@ -115,6 +114,7 @@ public class Customer_Menu implements Menu{
                 preparedStatement.setString(1, customerID);
                 resultSet = preparedStatement.executeQuery();
             }
+
             System.out.println(">> What books do you want to order??");
             System.out.println(">> Input ISBN and then the quantity.");
             System.out.println(">> You can press \"L\" to see ordered list, or \"F\" to finish ordering.");
@@ -240,21 +240,56 @@ public class Customer_Menu implements Menu{
 
     public void orderQuery(){
         try {
-            System.out.println("Please Input CustomerID: ");
             Scanner scanner = new Scanner(System.in);
+            
+            System.out.println("Please Input CustomerID: ");
+            
+            //Validate customerID
             String customerID = scanner.nextLine();
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                "SELECT customer_id FROM customer WHERE customer_id = ?"
+            );
+            preparedStatement.setString(1, customerID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(!resultSet.next()) {
+                System.out.println("Customer not found. Please enter a valid customerID: ");
+                customerID = scanner.nextLine();
+                preparedStatement = conn.prepareStatement(
+                    "SELECT customer_id FROM customer WHERE customer_id = ?"
+                );
+                preparedStatement.setString(1, customerID);
+                resultSet = preparedStatement.executeQuery();
+            }
 
             System.out.println("Please Input the Year: ");
-            String year = scanner.nextLine();
             
-            PreparedStatement preparedStatement = conn.prepareStatement(
+            //Validate year
+            String year = scanner.nextLine();
+            while (!year.matches("^[0-9]{4}$")) {
+                System.out.println("Invalid input. Please enter a valid year: ");
+                year = scanner.nextLine();
+            }
+
+            //Extract order information
+            preparedStatement = conn.prepareStatement(
                 "SELECT * FROM orders WHERE TO_CHAR(o_date, 'YYYY') = ? AND customer_id = ?"
             );
             preparedStatement.setString(1, year);
             preparedStatement.setString(2, customerID);
+            resultSet = preparedStatement.executeQuery();
             
-            ResultSet resultSet = preparedStatement.executeQuery();
-
+            //Output order information
+            if (!resultSet.next()) {
+                System.out.println("No orders found.");
+                return;
+            }
+            System.out.println("\nRecord : " + resultSet.getRow());
+            System.out.println("OrderID : " + resultSet.getInt("order_id"));
+            System.out.println("Order Date : " + resultSet.getString("o_date"));
+            System.out.println("Charge : " + resultSet.getDouble("charge"));
+            System.out.println("Shipping Status : " + resultSet.getString("shipping_status"));
+            
             while (resultSet.next()) {
                 System.out.println("\nRecord : " + resultSet.getRow());
                 System.out.println("OrderID : " + resultSet.getInt("order_id"));
