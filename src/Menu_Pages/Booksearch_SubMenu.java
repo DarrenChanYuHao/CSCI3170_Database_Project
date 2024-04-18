@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 public class Booksearch_SubMenu implements Menu {
 
     private Connection conn;
-
     /*
      * This class is to be used for the book search submenu displays and operations.
      */
@@ -31,7 +30,6 @@ public class Booksearch_SubMenu implements Menu {
          *    Input: None
          *    Output: None
          */
-
         String_Builder book_search = new String_Builder.Build_String().setMenuName("BookSearch_Menu").build();
         System.out.println(book_search.getSubMenuHeaders());
         System.out.println(book_search.getSubMenuOptionsList());
@@ -129,9 +127,10 @@ public class Booksearch_SubMenu implements Menu {
             String cleanTitleString = title.replace("%", "").replace("_", "");
 
             PreparedStatement preparedStatement = conn.prepareStatement(
-                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.title LIKE \'" + title + "\' ORDER BY CASE WHEN b.title = \'" + cleanTitleString + "\' THEN 0 ELSE 1 END, b.title ASC, b.ISBN ASC, a.author_name ASC;"
+                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.title LIKE ? ORDER BY CASE WHEN b.title = ? THEN 0 ELSE 1 END, b.title ASC, b.ISBN ASC, a.author_name ASC"
             );
             preparedStatement.setString(1, title);
+            preparedStatement.setString(2, cleanTitleString);
             ResultSet resultSet = preparedStatement.executeQuery();
             
             String currentISBN = "";
@@ -174,9 +173,10 @@ public class Booksearch_SubMenu implements Menu {
             String cleanAuthorNameString = authorName.replace("%", "").replace("_", "");
 
             PreparedStatement preparedStatement = conn.prepareStatement(
-                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name LIKE \'" + authorName + "\' ) ORDER BY CASE WHEN a.author_name = \'" + cleanAuthorNameString + "\' THEN 0 ELSE 1 END, b.title ASC, b.ISBN ASC, a.author_name ASC;"
+                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name LIKE ? ) ORDER BY CASE WHEN a.author_name = ? THEN 0 ELSE 1 END, b.title ASC, b.ISBN ASC, a.author_name ASC"
             );
             preparedStatement.setString(1, authorName);
+            preparedStatement.setString(2, cleanAuthorNameString);
             ResultSet resultSet = preparedStatement.executeQuery();
             
             String currentISBN = "";

@@ -112,44 +112,58 @@ public class Customer_Menu implements Menu{
             Double charge;
             Integer bookOrdersQuantity = 0;
             Integer newOrderID;
+            String bookOrdersISBN;
 
             while(true) {
                 System.out.println("Please enter the book's ISBN: ");
-                String bookOrdersISBN = scanner.nextLine();
+                bookOrdersISBN = scanner.nextLine();
                 if (bookOrdersISBN.equals("F")) {
                     break;
                 } if (bookOrdersISBN.equals("L")) {
                     // Show the list of ordered books
-                    System.out.println("ISBN          Number:");
+                    System.out.print("ISBN          Number:");
                     System.out.println(orderedBooks);
                     
                 } else {
                     preparedStatement = conn.prepareStatement(
-                        "SELECT b.ISBN, b.title, b.no_of_copies, b.unit_price FROM book b WHERE b.ISBN = \'" + bookOrdersISBN + "\';"
+                        "SELECT MAX(order_id) AS LargestOrderID FROM orders"
                     );
+                    resultSet = preparedStatement.executeQuery();
+                    resultSet.next();
+                    newOrderID = resultSet.getInt("LargestOrderID") + 1;
+
+                    preparedStatement = conn.prepareStatement(
+                        "SELECT b.ISBN, b.title, b.no_of_copies, b.unit_price FROM book b WHERE b.ISBN = ?"
+                    );
+                    preparedStatement.setString(1, bookOrdersISBN);
                     resultSet = preparedStatement.executeQuery();
                     if (resultSet.next()) {
                         numberOfCopies = resultSet.getInt("no_of_copies");
-                        orderedBooks += resultSet.getString("ISBN") + " ";
+                        orderedBooks += "\n" + resultSet.getString("ISBN") + " ";
 
                         System.out.println("Please enter the quantity of the order: ");
                         bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
                         while (bookOrdersQuantity < 1 || bookOrdersQuantity > numberOfCopies) {
+                            System.out.println("Invalid quantity. Please enter a quantity between 1 and " + numberOfCopies + ": ");
                             bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
                         }
-                        orderedBooks += "  " + bookOrdersQuantity + "\n";
+                        orderedBooks += "  " + bookOrdersQuantity;
                         
                         date = LocalDate.now();
                         formattedDate = date.format(formatter);
 
                         charge = resultSet.getDouble("unit_price") * bookOrdersQuantity;
 
-                        newOrderID = resultSet.getInt("order_id") + 1;
-
                         preparedStatement = conn.prepareStatement(
-                            "INSERT INTO orders (order_id, o_date, shipping_status, charge, customer_id) VALUES (" + newOrderID + ", \'" + formattedDate + "\', 'N', " + charge + ", \'" + customerID + "\'');"
+                            "INSERT INTO orders (order_id, o_date, shipping_status, charge, customer_id) VALUES (?, ?, 'N', ?, ?)"
                         );
+                        preparedStatement.setInt(1, newOrderID);
+                        preparedStatement.setDate(2, Date.valueOf(formattedDate));
+                        preparedStatement.setDouble(3, charge);
+                        preparedStatement.setString(4, customerID);
                         resultSet = preparedStatement.executeQuery();
+                    } else {
+                        System.out.println("Book not found.");
                     }
                 }
                 
