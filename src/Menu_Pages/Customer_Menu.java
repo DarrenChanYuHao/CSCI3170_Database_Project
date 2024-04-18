@@ -21,9 +21,10 @@ public class Customer_Menu implements Menu{
     private Connection conn;
 
     // Constructor
-    public Customer_Menu(Database db) {
+    public Customer_Menu(Database db, Connection conn) {
         // Initialise Database
         this.db = db;    
+        this.conn = conn;
     }
 
     @Override
@@ -79,14 +80,14 @@ public class Customer_Menu implements Menu{
                 break;
             case 5:
                 // Back to main menu
-                Main_Menu main_menu = new Main_Menu(this.db);
+                Main_Menu main_menu = new Main_Menu(this.db, conn);
                 main_menu.show_display();
                 break;
         }
     }
 
     public void bookSearch(){
-        Booksearch_SubMenu booksearch_subMenu = new Booksearch_SubMenu();
+        Booksearch_SubMenu booksearch_subMenu = new Booksearch_SubMenu(this.conn);
         booksearch_subMenu.show_display();
     }
 
@@ -207,8 +208,11 @@ public class Customer_Menu implements Menu{
             String year = scanner.nextLine();
             
             PreparedStatement preparedStatement = conn.prepareStatement(
-                "SELECT * FROM orders WHERE o_date LIKE \'" + year + "%\' AND customer_id = \'" + customerID + "\';"
+                "SELECT * FROM orders WHERE TO_CHAR(o_date, 'YYYY') = ? AND customer_id = ?"
             );
+            preparedStatement.setString(1, year);
+            preparedStatement.setString(2, customerID);
+            
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

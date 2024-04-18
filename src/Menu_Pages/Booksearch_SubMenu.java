@@ -16,6 +16,12 @@ public class Booksearch_SubMenu implements Menu {
      * This class is to be used for the book search submenu displays and operations.
      */
 
+    // Constructor
+    public Booksearch_SubMenu(Connection conn) {
+        // Initialise Database
+        this.conn = conn;
+    }
+
     @Override
     public void show_display() {
         /*
@@ -29,6 +35,7 @@ public class Booksearch_SubMenu implements Menu {
         String_Builder book_search = new String_Builder.Build_String().setMenuName("BookSearch_Menu").build();
         System.out.println(book_search.getSubMenuHeaders());
         System.out.println(book_search.getSubMenuOptionsList());
+        choose_option();
     }
 
     @Override
@@ -76,10 +83,11 @@ public class Booksearch_SubMenu implements Menu {
             String isbn = scanner.nextLine();
 
             PreparedStatement preparedStatement = conn.prepareStatement(
-                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN = \'" + isbn + "\' ORDER BY b.title ASC, b.ISBN ASC, a.author_name ASC"
+                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN = ? ORDER BY b.title ASC, b.ISBN ASC, a.author_name ASC"
             );
             preparedStatement.setString(1, isbn);
             ResultSet resultSet = preparedStatement.executeQuery();
+
             
             String currentISBN = "";
             Integer recordCount = 0;
@@ -97,7 +105,7 @@ public class Booksearch_SubMenu implements Menu {
                     currentISBN = resultSet.getString("ISBN");
                     System.out.println("ISBN: " + currentISBN);
                     System.out.println("Book Title:" + resultSet.getString("title"));
-                    System.out.println("Unit Price:" + resultSet.getDouble("uni_price"));
+                    System.out.println("Unit Price:" + resultSet.getDouble("unit_price"));
                     System.out.println("No. Of Available:" + resultSet.getInt("no_of_copies"));
                     System.out.println("Authors:");
                     System.out.println(authorCount + " :" + resultSet.getString("author_name"));

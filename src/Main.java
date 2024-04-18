@@ -15,7 +15,7 @@ public class Main {
         conn = db.connectToOracle();
 
         // Initialise Main Menu
-        Main_Menu menu = new Main_Menu(db);
+        Main_Menu menu = new Main_Menu(db, conn);
 
         // Show Main Menu
         menu.show_display();

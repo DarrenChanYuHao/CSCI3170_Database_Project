@@ -1,6 +1,8 @@
 package Menu_Pages;
 
 import Model.*;
+
+import java.sql.Connection;
 import java.sql.Date;
 import Builders.String_Builder;
 import Handlers.Option_Handler;
@@ -12,11 +14,18 @@ public class Main_Menu implements Menu{
 
     // Attributes
     private Database db;
+    private Connection conn;
 
     // Constructor
+    public Main_Menu(Database db, Connection conn) {
+        // Initialise Database
+        this.db = db;
+        this.conn = conn;
+    }
+
     public Main_Menu(Database db) {
         // Initialise Database
-        this.db = db;    
+        this.db = db;
     }
 
     @Override
@@ -75,7 +84,7 @@ public class Main_Menu implements Menu{
                 break;
             case 2:
                 // Customer Menu
-                Customer_Menu customer_menu = new Customer_Menu(this.db);
+                Customer_Menu customer_menu = new Customer_Menu(this.db, conn);
                 customer_menu.show_display();
                 break;
             case 3:
