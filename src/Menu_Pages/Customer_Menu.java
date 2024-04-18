@@ -93,17 +93,33 @@ public class Customer_Menu implements Menu{
 
     public void orderCreation(){
         try {    
+            PreparedStatement preparedStatement;
+            ResultSet resultSet;
+            
             System.out.println("Please enter your customerID??");
             Scanner scanner = new Scanner(System.in);
-            String customerID = scanner.nextLine();
+            String customerID;
+            customerID = scanner.nextLine();
+            preparedStatement = conn.prepareStatement(
+                "SELECT customer_id FROM customer WHERE customer_id = ?"
+            );
+            preparedStatement.setString(1, customerID);
+            resultSet = preparedStatement.executeQuery();
 
+            while(!resultSet.next()) {
+                System.out.println("Customer not found. Please enter a valid customerID: ");
+                customerID = scanner.nextLine();
+                preparedStatement = conn.prepareStatement(
+                    "SELECT customer_id FROM customer WHERE customer_id = ?"
+                );
+                preparedStatement.setString(1, customerID);
+                resultSet = preparedStatement.executeQuery();
+            }
             System.out.println(">> What books do you want to order??");
             System.out.println(">> Input ISBN and then the quantity.");
             System.out.println(">> You can press \"L\" to see ordered list, or \"F\" to finish ordering.");
 
             //while loop variables
-            PreparedStatement preparedStatement;
-            ResultSet resultSet;
             Integer numberOfCopies;
             String orderedBooks = "";
             LocalDate date;
@@ -112,6 +128,7 @@ public class Customer_Menu implements Menu{
             Double charge;
             Integer bookOrdersQuantity = 0;
             Integer newOrderID;
+            String formattedNewOrderID;
             String bookOrdersISBN;
 
             while(true) {
@@ -131,6 +148,7 @@ public class Customer_Menu implements Menu{
                     resultSet = preparedStatement.executeQuery();
                     resultSet.next();
                     newOrderID = resultSet.getInt("LargestOrderID") + 1;
+                    formattedNewOrderID = String.format("%08d", newOrderID);
 
                     preparedStatement = conn.prepareStatement(
                         "SELECT b.ISBN, b.title, b.no_of_copies, b.unit_price FROM book b WHERE b.ISBN = ?"
@@ -140,12 +158,20 @@ public class Customer_Menu implements Menu{
                     if (resultSet.next()) {
                         numberOfCopies = resultSet.getInt("no_of_copies");
                         orderedBooks += "\n" + resultSet.getString("ISBN") + " ";
-
                         System.out.println("Please enter the quantity of the order: ");
-                        bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
-                        while (bookOrdersQuantity < 1 || bookOrdersQuantity > numberOfCopies) {
-                            System.out.println("Invalid quantity. Please enter a quantity between 1 and " + numberOfCopies + ": ");
-                            bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
+                        //try catch here for integer conversion
+                        while (true) {
+                            try {
+                                bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
+                                while (bookOrdersQuantity < 1 || bookOrdersQuantity > numberOfCopies) {
+                                    System.out.println("Invalid quantity. Please enter a quantity between 1 and " + numberOfCopies + ": ");
+                                    bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
+                                }
+                                break;
+                            } catch (NumberFormatException e) {
+                                System.out.println("Invalid quantity. Please enter a quantity between 1 and " + numberOfCopies + ": ");
+                                bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
+                            }
                         }
                         orderedBooks += "  " + bookOrdersQuantity;
                         
@@ -157,7 +183,7 @@ public class Customer_Menu implements Menu{
                         preparedStatement = conn.prepareStatement(
                             "INSERT INTO orders (order_id, o_date, shipping_status, charge, customer_id) VALUES (?, ?, 'N', ?, ?)"
                         );
-                        preparedStatement.setInt(1, newOrderID);
+                        preparedStatement.setString(1, formattedNewOrderID);
                         preparedStatement.setDate(2, Date.valueOf(formattedDate));
                         preparedStatement.setDouble(3, charge);
                         preparedStatement.setString(4, customerID);
