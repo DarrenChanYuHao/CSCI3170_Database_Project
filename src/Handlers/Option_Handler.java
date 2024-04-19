@@ -12,6 +12,12 @@ public class Option_Handler {
 
     /*
      * This class is to be used for all option handling operations.
+     * 
+     * Note regarding scanner resource leak warning:
+     * https://stackoverflow.com/questions/15613626/scanner-is-never-closed
+     * 
+     * It is not necessary to close the scanner. If scanner is closed then System.in will also be closed which
+     * prevents further input from the user. This is why the scanner is not closed in our code.
      */
 
     Scanner choice_Scanner;
@@ -46,7 +52,6 @@ public class Option_Handler {
             }
             
         }
-        //choice_Scanner.close();
         return user_input;
     }
 
@@ -75,21 +80,6 @@ public class Option_Handler {
             }
             
         }
-        /* 
-        while (user_input < 1 || user_input > num_of_options) {
-            try {
-                user_input = choice_Scanner.nextInt();
-                choice_Scanner.nextLine();
-                if (user_input < 1 || user_input > 5) {
-                    System.out.println("Invalid input. Please enter a number from 1 to " + num_of_options + ".");
-                }
-            } catch (Exception e) {
-                System.out.println("Invalid input. Please enter a number from 1 to " + num_of_options + ".");
-                choice_Scanner.nextLine();
-            }
-        }*/
-
-        //choice_Scanner.close();
         return user_input;
     }
 
@@ -105,7 +95,6 @@ public class Option_Handler {
 
         Scanner choice_Scanner = new Scanner(System.in);
         String user_input = choice_Scanner.nextLine();
-        //choice_Scanner.close();
         return user_input;
     }
 
@@ -145,8 +134,6 @@ public class Option_Handler {
                 user_input = choice_Scanner.nextLine();
             }
         }
-
-        //choice_Scanner.close();
 
         return user_input;
     }

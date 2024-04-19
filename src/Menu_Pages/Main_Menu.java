@@ -23,11 +23,6 @@ public class Main_Menu implements Menu{
         this.conn = conn;
     }
 
-    public Main_Menu(Database db) {
-        // Initialise Database
-        this.db = db;
-    }
-
     @Override
     public void show_display() {
 
@@ -79,7 +74,7 @@ public class Main_Menu implements Menu{
         switch (user_input){
             case 1:
                 // System Menu
-                System_Menu system_menu = new System_Menu(this.db);
+                System_Menu system_menu = new System_Menu(this.db, conn);
                 system_menu.show_display();
                 break;
             case 2:
@@ -89,7 +84,7 @@ public class Main_Menu implements Menu{
                 break;
             case 3:
                 // Bookstore Menu
-                Bookstore_Menu bookstore_menu = new Bookstore_Menu(this.db);
+                Bookstore_Menu bookstore_menu = new Bookstore_Menu(this.db, conn);
                 bookstore_menu.show_display();
                 break;
             case 4:

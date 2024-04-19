@@ -1,9 +1,11 @@
 package Menu_Pages;
 
+import java.sql.Connection;
 import java.util.Date;
 import Builders.String_Builder;
 import Handlers.Option_Handler;
 import Model.Database;
+import oracle.net.aso.c;
 
 public class Bookstore_Menu implements Menu {
 
@@ -14,10 +16,12 @@ public class Bookstore_Menu implements Menu {
     Date system_time;
     private Database db;
     Option_Handler optionHandler = new Option_Handler();
+    Connection conn;
 
-    public Bookstore_Menu(Database db) {
+    public Bookstore_Menu(Database db, Connection conn) {
         // Initialise Database
-        this.db = db;    
+        this.db = db;
+        this.conn = conn;    
     }
 
     @Override
@@ -69,7 +73,7 @@ public class Bookstore_Menu implements Menu {
                 break;
             case 4:
                 // Back to main menu
-                Main_Menu main_menu = new Main_Menu(this.db);
+                Main_Menu main_menu = new Main_Menu(this.db, this.conn);
                 main_menu.show_display();
                 break;
         }
@@ -106,7 +110,7 @@ public class Bookstore_Menu implements Menu {
             // If user input is not Y, return to bookstore menu
             if (!user_input_2.toUpperCase().equals("Y")) {
                 // Back to bookstore menu if not Y
-                Bookstore_Menu bookstore_menu = new Bookstore_Menu(this.db);
+                Bookstore_Menu bookstore_menu = new Bookstore_Menu(this.db, this.conn);
                 bookstore_menu.show_display();
                 return;
             }

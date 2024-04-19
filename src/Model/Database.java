@@ -25,14 +25,19 @@ public class Database {
      *    Output: None    
      */
     
+        System.out.println("Connecting to database");
+
         // Load the Oracle JDBC driver
         try {
             // Use this to test if your connections are working
             Class.forName("oracle.jdbc.driver.OracleDriver");
             conn = DriverManager.getConnection("jdbc:oracle:thin:@//db18.cse.cuhk.edu.hk:1521/oradb.cse.cuhk.edu.hk","h006","RukjuArj");
+            System.out.println("Connected to Oracle Database");
+            System.out.flush();
         }
         catch (ClassNotFoundException e) {
-            System.out.println("Could not load the driver" + e.getException());
+            System.out.println("Failed to connect to database");
+            System.out.println("Error as follows:" + e.getException());
         }
 
         return conn;
