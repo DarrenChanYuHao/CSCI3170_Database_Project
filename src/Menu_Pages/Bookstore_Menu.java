@@ -88,19 +88,26 @@ public class Bookstore_Menu implements Menu {
          */
 
         // Prompt user to input order ID
-        System.out.println("Please Input your order ID: ");
-        String user_input = optionHandler.get_user_input_string("order ID");
+        int order_status = 0;
+        String user_input = "";
 
-        // display details as required. return the shipping status of the order
-        // 0 - order status is Y (shipped)
-        // 1 - order status is N (not shipped) and quantity is more than 0 (Shipping Status can be updated)
-        // 2 - order status is N (not shipped) and quantity is 0 (TBC : Waiting for clarification from TA)
-        // 3 - order does not exist
-        int order_status = db.book_store_operations("order update (order ID)", user_input);
+        while (true) {
+            System.out.println("Please Input your order ID: ");
+            user_input = optionHandler.get_user_input_string("order ID");
+
+            // display details as required. return the shipping status of the order
+            // 0 - order status is Y (shipped)
+            // 1 - order status is N (not shipped) and quantity is more than 0 (Shipping Status can be updated)
+            // 2 - order status is N (not shipped) and quantity is 0 (TBC : Waiting for clarification from TA)
+            // 3 - order does not exist
+            // 4 - order status is N and qua
+            order_status = db.book_store_operations("order update (order ID)", user_input);
+
+            if (order_status != 2) break;
+        }
         
         // If order is not shipped and quantity is more than 0, prompt user to update shipping status
-        if (order_status == 1) {
-            
+        if (order_status == 1) {           
             // Get user input for Yes or No
             System.out.println("Are you sure to update the shipping status? (Yes=Y)");
 

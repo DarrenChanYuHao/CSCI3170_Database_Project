@@ -28,23 +28,22 @@ public class BookStore_Operations {
          *           4 - SQL Exception
          */
 
-        try {
-
+        try {          
             // For our prepared statement, we will select the shipping status from ORDERS and the quantity from ORDERING
             // We will join the two tables on the order_id and search for the input order_id
+            int quantity = 0;
+            String status = "";
+
             PreparedStatement ptsm = 
                 conn.prepareStatement("SELECT o.shipping_status, ord.quantity FROM orders o JOIN ordering ord ON o.order_id = ord.order_id WHERE o.order_id = ?");
             ptsm.setString(1, input);
             ResultSet rs = ptsm.executeQuery();
 
-            int quantity = 0;
-            String status = "";
-
             // We have to iterate through the set as there can be multiple rows with the same order_id due to multiple books in an order
             // We will want to add up all the quantity of the book.
             while (rs.next()) {
                 status = rs.getString("shipping_status");
-                quantity = quantity + rs.getInt("quantity");
+                quantity = quantity + rs.getInt("quantity");    
             }
 
             // If it is last row, print the status and quantity of the order
@@ -63,6 +62,7 @@ public class BookStore_Operations {
 
                 // If order status is N, and quantity is 0, return false
                 else {
+                    System.out.println("Please enter another Order ID.");
                     return 2;
                 }
             
@@ -79,7 +79,7 @@ public class BookStore_Operations {
     }
 
     // Order Update (Update Shipping Status)
-    public int orderUpdate_updateShippingStatus(String order_id, String Y_or_No){
+    public int orderUpdate_updateShippingStatus(String order_id, String Y_or_N){
         /*
          *  This method is to be used to update the shipping status of an order if the order has not been shipped and the quantity is more than 0.
          *  This is basically part 2 of the order update operation.
@@ -87,9 +87,7 @@ public class BookStore_Operations {
          *  Output: 1 - Success
          *          0 - Failure
          */
-
         try {
-
             // For our prepared statement, we UPDATE the shipping status in ORDERS according to the order_id
             PreparedStatement ptsm = 
                 conn.prepareStatement("UPDATE orders SET shipping_status = 'Y' WHERE order_id = ?");
@@ -156,7 +154,7 @@ public class BookStore_Operations {
         }
     }
 
-    // ========================================================================================================
+    // N most popular book query
     public void n_Most_Popular() { // Average time complexity: O(n)
         try {
             PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) as row_count FROM (SELECT b.title, ord.ISBN,  sum(ord.quantity) FROM ordering ord JOIN book b ON ord.ISBN = b.ISBN GROUP BY ord.ISBN, b.title ORDER BY sum(ord.quantity))");
