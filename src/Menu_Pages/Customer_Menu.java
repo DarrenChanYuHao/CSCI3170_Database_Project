@@ -88,6 +88,10 @@ public class Customer_Menu implements Menu{
         }
     }
 
+    public void SQLErrorMessage() {
+        System.out.println("Data either does not exist or is inaccessible, please check the SQL error code for more information");
+    }
+
     public void bookSearch(){
         Booksearch_SubMenu booksearch_subMenu = new Booksearch_SubMenu(this.conn);
         booksearch_subMenu.show_display();
@@ -197,10 +201,64 @@ public class Customer_Menu implements Menu{
                 
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLErrorMessage();
         }
     }
 
+    public String requestAddOrRemove() {
+        String addOrRemove;
+        System.out.println("input add or remove");
+        Scanner scanner = new Scanner(System.in);
+        while (true) {    
+            addOrRemove = scanner.nextLine();
+            //System.out.println("(" + addOrRemove + ")");
+            if (addOrRemove.equals("add") && addOrRemove.equals("remove")) {
+                System.out.println("Invalid input. Please enter either \"add\" or \"remove\": ");
+            } else {
+                break;
+            }
+        }
+        return addOrRemove;
+    }
+
+    public Integer requestAlterBookNo(Integer totalBookNo) {
+        System.out.println("Which book you want to alter (input book no.):");
+        Scanner scanner = new Scanner(System.in);
+        Integer alterBookNo;
+        while (true) {
+            try {
+                alterBookNo = Integer.parseInt(scanner.nextLine());
+                if (alterBookNo >= 1 && alterBookNo <= totalBookNo) {
+                    break;
+                } else {
+                    System.out.println("Invalid input. Please enter a number between 1 and " + totalBookNo + ": ");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and " + totalBookNo + ": ");
+            }
+        }
+        return alterBookNo;
+    }
+
+    public Integer requestTheNumber(Integer no_of_copies) {
+        Integer theNumber;
+        System.out.println("Input the number: ");
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            try {
+                theNumber = Integer.parseInt(scanner.nextLine());
+                if (theNumber >= 1) {
+                    break;
+                } else {
+                    System.out.println("Invalid input. Please enter a number bigger than 1: ");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number: ");
+            }
+        }
+        return theNumber;   
+    }
+    
     public void orderAlteration() {
         try {
             System.out.println("Please enter the OrderID that you want to change: ");
@@ -216,7 +274,7 @@ public class Customer_Menu implements Menu{
                 try {
                     //validate orderid from sql
                     preparedStatement = conn.prepareStatement(
-                    "SELECT os.order_id, os.shipping_status, os.charge, os.customer_id, og.quantity FROM orders os JOIN ordering og ON os.order_id = og.order_id WHERE os.order_id = ?"
+                    "SELECT os.order_id, os.shipping_status, os.charge, os.customer_id, og.quantity, og.ISBN FROM orders os JOIN ordering og ON os.order_id = og.order_id WHERE os.order_id = ?"
                     );
                     preparedStatement.setString(1, orderIDString);
                     resultSet = preparedStatement.executeQuery();
@@ -226,64 +284,142 @@ public class Customer_Menu implements Menu{
                         System.out.println("OrderID not found. Please enter a valid orderID: ");
                     }
                 } catch (SQLException e){
-                    e.printStackTrace();
+                    SQLErrorMessage();
                 }
             }
-            
-            System.out.println("order_id:" + resultSet.getInt("order_id") + "  shipping:" + resultSet.getString("shipping_status") + "  charge=" + resultSet.getDouble("charge") + "  customerId:" + resultSet.getString("customer_id"));
             Integer totalBookNo;
+
+            System.out.println("order_id:" + resultSet.getInt("order_id") + "  shipping:" + resultSet.getString("shipping_status") + "  charge=" + resultSet.getDouble("charge") + "  customerId:" + resultSet.getString("customer_id"));
             do {
                 totalBookNo = resultSet.getRow();
                 System.out.println("book no: " + totalBookNo + " ISBN = " + resultSet.getString("ISBN") + " quantity = " + resultSet.getInt("quantity"));
             } while (resultSet.next());
-            System.out.println("Which book you want to alter (input book no.):");
-            while (true) {
-                try {
-                    Integer alterBookNo = Integer.parseInt(scanner.nextLine());
-                    if (alterBookNo >= 1 && alterBookNo <= totalBookNo) {
-                        break;
-                    } else {
-                        System.out.println("Invalid input. Please enter a number between 1 and " + totalBookNo + ": ");
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input. Please enter a number between 1 and " + totalBookNo + ": ");
-                }
-            }
-            String addOrRemove;
-            while (true) {
-                System.out.println("input add or remove");
-                addOrRemove = scanner.nextLine();
-                if (addOrRemove != "add" && addOrRemove != "remove") {
-                    System.out.println("Invalid input. Please enter either \"add\" or \"remove\": ");
-                } else {
-                    break;
-                }
-            }
-            System.out.println("Input the number: ");
-            preparedStatement = conn.prepareStatement(
-                "SELECT os.order_id, os.shipping_status, os.charge, os.customer_id, og.quantity FROM orders os JOIN ordering og ON os.order_id = og.order_id WHERE os.order_id = ?"
-            );
-            preparedStatement.setString(1, orderIDString);
-            resultSet = preparedStatement.executeQuery();
 
-            while (true) {
-                try {
-                    Integer theNumber = Integer.parseInt(scanner.nextLine());
-                    break;
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input. Please enter a number: ");
+            Integer alterBookNo;
+            String addOrRemove;
+            Integer theNumber;
+            ResultSet resultSet2;
+            PreparedStatement preparedStatement2;
+            PreparedStatement preparedStatement3;
+            ResultSet resultSet3;
+            Integer no_of_copies;
+            
+            while(true) {
+                alterBookNo = requestAlterBookNo(totalBookNo);
+            
+                addOrRemove = requestAddOrRemove();
+
+                resultSet2 = preparedStatement.executeQuery();
+                for (int rep = 0; rep < alterBookNo; rep++) {
+                    resultSet2.next();
                 }
-            }
-            if (addOrRemove == "add") {
+                if (resultSet2.getString("shipping_status").equals("Y")) {
+                    System.out.println("The books in the order are shipped");
+                    break;
+                }
+                preparedStatement2 = conn.prepareStatement(
+                    "SELECT no_of_copies, unit_price FROM book WHERE ISBN = ?"
+                );
+                preparedStatement2.setString(1, resultSet2.getString("ISBN"));
                 
-            } else {
+                resultSet3 = preparedStatement2.executeQuery();
+                resultSet3.next();
+                no_of_copies = resultSet3.getInt("no_of_copies");
+
+                theNumber = requestTheNumber(no_of_copies);
                 
+                if (addOrRemove.equals("add")) {
+                    if (theNumber >= no_of_copies) {
+                        System.out.println("Number exceeds the available book copies. Book only has " + no_of_copies + ".");
+                        continue;
+                    }
+                    System.out.println("Update is ok!");
+                    //add theNumber to the quantity in ordering
+                    //update total charge in orders by adding theNumber * unit_price of the book
+                    //update no_of_copies in book by subtracting theNumber
+                    //update date in orders to current date
+                    preparedStatement3 = conn.prepareStatement(
+                        "UPDATE ordering SET quantity = ? WHERE order_id = ? AND ISBN = ?"
+                    );
+                    preparedStatement3.setInt(1, resultSet2.getInt("quantity") + theNumber);
+                    preparedStatement3.setString(2, orderIDString);
+                    preparedStatement3.setString(3, resultSet2.getString("ISBN"));
+                    preparedStatement3.executeQuery();
+
+                    preparedStatement3 = conn.prepareStatement(
+                        "UPDATE orders SET charge = ? WHERE order_id = ?"
+                    );
+                    preparedStatement3.setDouble(1, resultSet2.getDouble("charge") + theNumber * resultSet3.getDouble("unit_price"));
+                    preparedStatement3.setString(2, orderIDString);
+                    preparedStatement3.executeQuery();
+
+                    preparedStatement3 = conn.prepareStatement(
+                        "UPDATE book SET no_of_copies = ? WHERE ISBN = ?"
+                    );
+                    preparedStatement3.setInt(1, resultSet3.getInt("no_of_copies") - theNumber);
+                    preparedStatement3.setString(2, resultSet2.getString("ISBN"));
+                    preparedStatement3.executeQuery();
+
+                    preparedStatement3 = conn.prepareStatement(
+                        "UPDATE orders SET o_date = ? WHERE order_id = ?"
+                    );
+                    preparedStatement3.setDate(1, db.getSystemDate());
+                    preparedStatement3.setString(2, orderIDString);
+                    preparedStatement3.executeQuery();
+                    
+                } else if (addOrRemove.equals("remove")){
+                    if (theNumber >= resultSet2.getInt("quantity")) {
+                        System.out.println("Number exceeds the total ordered book copies. Book only has " + resultSet2.getInt("quantity") + ".");
+                        continue;
+                    }
+                    System.out.println("Update is ok!");
+                    //subtract theNumber to the quantity in ordering
+                    //update total charge in orders by subtracting theNumber * unit_price of the book
+                    //update no_of_copies in book by adding theNumber
+                    //update date in orders to current date
+                    preparedStatement3 = conn.prepareStatement(
+                        "UPDATE ordering SET quantity = ? WHERE order_id = ? AND ISBN = ?"
+                    );
+                    preparedStatement3.setInt(1, resultSet2.getInt("quantity") - theNumber);
+                    preparedStatement3.setString(2, orderIDString);
+                    preparedStatement3.setString(3, resultSet2.getString("ISBN"));
+                    preparedStatement3.executeQuery();
+
+                    preparedStatement3 = conn.prepareStatement(
+                        "UPDATE orders SET charge = ? WHERE order_id = ?"
+                    );
+                    preparedStatement3.setDouble(1, resultSet2.getDouble("charge") - theNumber * resultSet3.getDouble("unit_price"));
+                    preparedStatement3.setString(2, orderIDString);
+                    preparedStatement3.executeQuery();
+                    
+                    preparedStatement3 = conn.prepareStatement(
+                        "UPDATE book SET no_of_copies = ? WHERE ISBN = ?"
+                    );
+                    preparedStatement3.setInt(1, resultSet3.getInt("no_of_copies") + theNumber);
+                    preparedStatement3.setString(2, resultSet2.getString("ISBN"));
+                    preparedStatement3.executeQuery();
+
+                    preparedStatement3 = conn.prepareStatement(
+                        "UPDATE orders SET o_date = ? WHERE order_id = ?"
+                    );
+                    preparedStatement3.setDate(1, db.getSystemDate());
+                    preparedStatement3.setString(2, orderIDString);
+                    preparedStatement3.executeQuery();
+
+                }
+                System.out.println("update done!!");
+                System.out.println("updated charge");
+                resultSet2 = preparedStatement.executeQuery();
+                for (int rep = 0; rep < alterBookNo; rep++) {
+                    resultSet2.next();
+                }
+                System.out.println("order_id:" + resultSet2.getInt("order_id") + "  shipping:" + resultSet2.getString("shipping_status") + "  charge=" + resultSet2.getDouble("charge") + "  customerId:" + resultSet2.getString("customer_id"));
+                System.out.println("book no: " + alterBookNo + " ISBN = " + resultSet2.getString("ISBN") + " quantity = " + resultSet2.getInt("quantity"));
+                break;
             }
             
-
-            // Show new order details blah blah write methods later
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLErrorMessage();
         }
     }
 
@@ -347,7 +483,7 @@ public class Customer_Menu implements Menu{
                 System.out.println("Shipping Status : " + resultSet.getString("shipping_status"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLErrorMessage();
         }
     }
 }
