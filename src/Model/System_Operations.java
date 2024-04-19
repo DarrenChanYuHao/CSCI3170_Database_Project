@@ -33,7 +33,8 @@ public class System_Operations {
             System.out.println("Table successfully created.");
         }
         catch (SQLException e) {
-            System.out.println("Error Code: " + e.getErrorCode());
+            System.out.println("Error Code:" + e.getErrorCode());
+            System.out.println("Please check the SQL error code for more information");
         }
     }
 
@@ -50,8 +51,8 @@ public class System_Operations {
             System.out.println("Table successfully deleted.");
         }
         catch (SQLException e) {
-            System.out.println("Error Code: " + e.getErrorCode());
-        
+            System.out.println("Error Code:" + e.getErrorCode());
+            System.out.println("Please check the SQL error code for more information");
         }
     }
 
@@ -106,6 +107,7 @@ public class System_Operations {
         catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            System.out.println("Please check the error code for more information");
         }
     }
     

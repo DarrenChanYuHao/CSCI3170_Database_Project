@@ -73,7 +73,8 @@ public class BookStore_Operations {
             }
         }
         catch (SQLException e) {
-            System.out.println( e.getErrorCode());
+            System.out.println("Error Code:" + e.getErrorCode());
+            System.out.println("Data either does not exist or is inaccessible, please check the SQL error code for more information");
             return 4;
         }
     }
@@ -112,7 +113,8 @@ public class BookStore_Operations {
             }
         }
         catch (SQLException e) {
-            System.out.println( e.getErrorCode());
+            System.out.println("Error Code:" + e.getErrorCode());
+            System.out.println("Data either does not exist or is inaccessible, please check the SQL error code for more information");
         }
         return 0;
     }
@@ -150,7 +152,8 @@ public class BookStore_Operations {
             System.out.println("Total charges of the month is " + sum);
         } 
         catch (SQLException e) {
-            System.out.println( e.getErrorCode());
+            System.out.println("Error Code:" + e.getErrorCode());
+            System.out.println("Data either does not exist or is inaccessible, please check the SQL error code for more information");
         }
     }
 
@@ -177,7 +180,8 @@ public class BookStore_Operations {
             }    
         }
         catch (SQLException e) {
-            System.out.println( e.getErrorCode());
+            System.out.println("Error Code:" + e.getErrorCode());
+            System.out.println("Data either does not exist or is inaccessible, please check the SQL error code for more information");
         }
     }
 }

@@ -67,12 +67,13 @@ public class Database {
         
         if (latest_order_date != null && latest_order_date.after(Date.valueOf(formatted_new_date))) {
             System.out.println("Error: The new system date is before the latest order date.");
-            System.out.println("Latest order date: " + latest_order_date);
+            System.out.println("Latest date in orders: " + latest_order_date);
             return;
         }
         else {
             system_date = Date.valueOf(formatted_new_date);
-            System.out.println("System date updated successfully");
+            System.out.println("Latest date in orders: " + latest_order_date);
+            System.out.println("Today is " + system_date);
         }
     }
 
