@@ -9,7 +9,6 @@ public class Main {
         Connection conn = null;
         Database db = null;
 
-
         // // Initialise Database
         db = new Database();
         conn = db.connectToOracle();

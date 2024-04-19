@@ -1,9 +1,10 @@
 package Menu_Pages;
 
+import java.sql.Connection;
+
 import Builders.String_Builder;
 import Handlers.Option_Handler;
 import Model.Database;
-import oracle.net.aso.d;
 
 public class System_Menu implements Menu {
 
@@ -14,11 +15,13 @@ public class System_Menu implements Menu {
     // Attributes
     private Database db;
     Option_Handler optionHandler;
+    Connection conn;
 
     // Constructor
-    public System_Menu(Database db) {
+    public System_Menu(Database db, Connection conn) {
         // Initialise Database
         this.db = db;
+        this.conn = conn;
         optionHandler = new Option_Handler();
     }
 
@@ -52,7 +55,7 @@ public class System_Menu implements Menu {
                 break;
             case 5:
                 // Back to main menu
-                Main_Menu main_menu = new Main_Menu(this.db);
+                Main_Menu main_menu = new Main_Menu(this.db, this.conn);
                 main_menu.show_display();
                 break;
             default:
@@ -74,7 +77,6 @@ public class System_Menu implements Menu {
     }
 
     public void insertData(){
-        // TODO System Menu 3: Insert Data
         System.out.println("Please enter the folder path");
 
         // do some sort of read
