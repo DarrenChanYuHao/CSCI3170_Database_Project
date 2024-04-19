@@ -2,6 +2,8 @@ package Model;
 
 import java.sql.*;
 
+import oracle.net.aso.e;
+
 public class Database {
 /*
  * This class is to be used for all database operations.
@@ -14,8 +16,10 @@ public class Database {
                             "(order_id varchar(8) PRIMARY KEY, o_date date, shipping_status varchar(1), charge int CHECK (charge >= 0), customer_id varchar(10))",
                             "(order_id varchar(8), ISBN varchar(13), quantity int CHECK (quantity >= 0), PRIMARY KEY(order_id, ISBN))",
                             "(ISBN varchar(13), author_name varchar(50), PRIMARY KEY(ISBN, author_name))"};
+    Date system_date;
 
     public Database() throws SQLException {
+       // system_date = Date.valueOf("0000-00-00");
     }
 
     public Connection connectToOracle() throws SQLException {
@@ -43,6 +47,48 @@ public class Database {
         return conn;
     }
 
+    // Get System Date
+    public Date getSystemDate() {
+        return system_date;
+    }
+
+    // Set System Date
+    public void setSystemDate(String new_date) {
+        // Extract the year, month, and day from the input string
+        String year = new_date.substring(0, 4);
+        String month = new_date.substring(4, 6);
+        String day = new_date.substring(6, 8);
+
+        // Create the formatted date string with hyphens
+        String formatted_new_date = year + "-" + month + "-" + day;
+
+        // Get latest order date
+        Date latest_order_date = getLatestOrderDate();
+        
+        if (latest_order_date != null && latest_order_date.after(Date.valueOf(formatted_new_date))) {
+            System.out.println("Error: The new system date is before the latest order date.");
+            System.out.println("Latest order date: " + latest_order_date);
+            return;
+        }
+        else {
+            system_date = Date.valueOf(formatted_new_date);
+            System.out.println("System date updated successfully");
+        }
+    }
+
+    // Get latest order date
+    public Date getLatestOrderDate() {
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT MAX(o_date) FROM orders");
+            rs.next();
+            return rs.getDate(1);
+        } catch (SQLException e) {
+            System.out.println("Error Code: " + e.getErrorCode());
+        }
+        return null;
+    }
+
     // For System Operations
     // ========================================================================================================
     public void system_operations(String operation){
@@ -61,21 +107,21 @@ public class Database {
             case "deleteTable":
                 sys_ops.deleteTable(tableNames);
                 break;
-            case "setdate":
-                sys_ops.setSystemDate();
-                break;
         }
     }
 
-    // Overloaded method for insertData
-    public void system_operations(String operation, String folderPath){
+    // Overloaded method for insertData and setdate
+    public void system_operations(String operation, String user_input){
         
         System_Operations sys_ops = new System_Operations(conn);
         
         switch (operation){
             case "insertData":
-                sys_ops.insertData(folderPath);
+                sys_ops.insertData(user_input);
                 break;
+            case "setdate":
+                setSystemDate(user_input);
+            break;
         }
     }
     // ========================================================================================================

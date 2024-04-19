@@ -2,6 +2,8 @@ package Menu_Pages;
 
 import java.util.Scanner;
 
+import javax.naming.spi.DirStateFactory.Result;
+
 import Builders.String_Builder;
 import Handlers.Option_Handler;
 import Model.Database;
@@ -203,35 +205,82 @@ public class Customer_Menu implements Menu{
         try {
             System.out.println("Please enter the OrderID that you want to change: ");
             Scanner scanner = new Scanner(System.in);
-            String orderID = scanner.nextLine();
+            String orderIDString;
 
-            PreparedStatement preparedStatement = conn.prepareStatement(
-                "SELECT * FROM orders WHERE order_id = " + orderID + ";"
-            );
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (!resultSet.next()) {
-                System.out.println("OrderID not found.");
-                return;
-            } else {
-                System.out.println("order_id:" + resultSet.getInt("order_id") + "  shipping:" + resultSet.getString("shipping_status") + "  charge=" + resultSet.getDouble("charge") + "  customerId:" + resultSet.getString("customer_id"));
-                //System.out.println("book no: " + bookNo + " ISBN = " + isbn + " quantity = " + quantity);
-                System.out.println("Which book you want to alter (input book no.):\n");
-
+            PreparedStatement preparedStatement;
+            ResultSet resultSet;
+            
+            //validate orderid from integer/string values
+            while (true) {
+                orderIDString = scanner.nextLine();
+                try {
+                    //validate orderid from sql
+                    preparedStatement = conn.prepareStatement(
+                    "SELECT os.order_id, os.shipping_status, os.charge, os.customer_id, og.quantity FROM orders os JOIN ordering og ON os.order_id = og.order_id WHERE os.order_id = ?"
+                    );
+                    preparedStatement.setString(1, orderIDString);
+                    resultSet = preparedStatement.executeQuery();
+                    if (resultSet.next()) {
+                        break;
+                    } else {
+                        System.out.println("OrderID not found. Please enter a valid orderID: ");
+                    }
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
             }
             
+            System.out.println("order_id:" + resultSet.getInt("order_id") + "  shipping:" + resultSet.getString("shipping_status") + "  charge=" + resultSet.getDouble("charge") + "  customerId:" + resultSet.getString("customer_id"));
+            Integer totalBookNo;
+            do {
+                totalBookNo = resultSet.getRow();
+                System.out.println("book no: " + totalBookNo + " ISBN = " + resultSet.getString("ISBN") + " quantity = " + resultSet.getInt("quantity"));
+            } while (resultSet.next());
+            System.out.println("Which book you want to alter (input book no.):");
+            while (true) {
+                try {
+                    Integer alterBookNo = Integer.parseInt(scanner.nextLine());
+                    if (alterBookNo >= 1 && alterBookNo <= totalBookNo) {
+                        break;
+                    } else {
+                        System.out.println("Invalid input. Please enter a number between 1 and " + totalBookNo + ": ");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number between 1 and " + totalBookNo + ": ");
+                }
+            }
+            String addOrRemove;
+            while (true) {
+                System.out.println("input add or remove");
+                addOrRemove = scanner.nextLine();
+                if (addOrRemove != "add" && addOrRemove != "remove") {
+                    System.out.println("Invalid input. Please enter either \"add\" or \"remove\": ");
+                } else {
+                    break;
+                }
+            }
+            System.out.println("Input the number: ");
+            preparedStatement = conn.prepareStatement(
+                "SELECT os.order_id, os.shipping_status, os.charge, os.customer_id, og.quantity FROM orders os JOIN ordering og ON os.order_id = og.order_id WHERE os.order_id = ?"
+            );
+            preparedStatement.setString(1, orderIDString);
+            resultSet = preparedStatement.executeQuery();
+
+            while (true) {
+                try {
+                    Integer theNumber = Integer.parseInt(scanner.nextLine());
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number: ");
+                }
+            }
+            if (addOrRemove == "add") {
+                
+            } else {
+                
+            }
             
 
-            System.out.println("Input add or remove");
-            // do some sort of read
-            // process the read
-
-            System.out.println("Input the number: ");
-            // do some sort of read
-            // process the read
-
-            System.out.println("Update is ok!");
-            System.out.println("update is done!!");
-            System.out.println("updated charge");
             // Show new order details blah blah write methods later
         } catch (SQLException e) {
             e.printStackTrace();
@@ -289,7 +338,7 @@ public class Customer_Menu implements Menu{
             System.out.println("Order Date : " + resultSet.getString("o_date"));
             System.out.println("Charge : " + resultSet.getDouble("charge"));
             System.out.println("Shipping Status : " + resultSet.getString("shipping_status"));
-            
+
             while (resultSet.next()) {
                 System.out.println("\nRecord : " + resultSet.getRow());
                 System.out.println("OrderID : " + resultSet.getInt("order_id"));

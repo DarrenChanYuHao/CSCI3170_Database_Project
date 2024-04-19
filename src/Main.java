@@ -4,6 +4,9 @@ import Model.*;
 import java.sql.*;
 
 public class Main {
+
+    public static String system_date = "0000-00-00";
+
     public static void main(String[] args) throws SQLException {
 
         Connection conn = null;

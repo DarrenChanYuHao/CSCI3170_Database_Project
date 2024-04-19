@@ -108,11 +108,6 @@ public class System_Operations {
             e.printStackTrace();
         }
     }
-
-    // Set System Date
-    public void setSystemDate() {
-        // Set System Date
-    }
     
     public List<String> getFilePathfromFolder(String folderPath) throws IOException {
         // https://stackoverflow.com/questions/1844688/how-can-i-read-all-files-in-a-folder-from-java
