@@ -108,8 +108,10 @@ public class Bookstore_Menu implements Menu {
             // Note the above, no input verification needed as anything that is not Y will be considered as No
 
             // If user input is not Y, return to bookstore menu
-            if (!user_input_2.toUpperCase().equals("Y")) {
+            if (!user_input_2.equals("Y")) {
                 // Back to bookstore menu if not Y
+                System.out.println("Shipping status update cancelled.");
+                System.out.flush();
                 Bookstore_Menu bookstore_menu = new Bookstore_Menu(this.db, this.conn);
                 bookstore_menu.show_display();
                 return;
