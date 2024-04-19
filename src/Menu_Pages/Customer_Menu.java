@@ -206,33 +206,27 @@ public class Customer_Menu implements Menu{
             System.out.println("Please enter the OrderID that you want to change: ");
             Scanner scanner = new Scanner(System.in);
             String orderIDString;
-            Integer orderIDInteger;
 
             PreparedStatement preparedStatement;
             ResultSet resultSet;
             
             //validate orderid from integer/string values
             while (true) {
+                orderIDString = scanner.nextLine();
                 try {
-                    orderIDInteger = Integer.parseInt(scanner.nextLine());
-                    orderIDString = String.format("%08d", orderIDInteger);
-                    try {
-                        //validate orderid from sql
-                        preparedStatement = conn.prepareStatement(
-                        "SELECT os.order_id, os.shipping_status, os.charge, os.customer_id, og.quantity FROM orders os JOIN ordering og ON os.order_id = og.order_id WHERE os.order_id = ?"
-                        );
-                        preparedStatement.setString(1, orderIDString);
-                        resultSet = preparedStatement.executeQuery();
-                        if (resultSet.next()) {
-                            break;
-                        } else {
-                            System.out.println("OrderID not found. Please enter a valid orderID: ");
-                        }
-                    } catch (SQLException e){
-                        e.printStackTrace();
+                    //validate orderid from sql
+                    preparedStatement = conn.prepareStatement(
+                    "SELECT os.order_id, os.shipping_status, os.charge, os.customer_id, og.quantity FROM orders os JOIN ordering og ON os.order_id = og.order_id WHERE os.order_id = ?"
+                    );
+                    preparedStatement.setString(1, orderIDString);
+                    resultSet = preparedStatement.executeQuery();
+                    if (resultSet.next()) {
+                        break;
+                    } else {
+                        System.out.println("OrderID not found. Please enter a valid orderID: ");
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input. Please enter a valid orderID: ");
+                } catch (SQLException e){
+                    e.printStackTrace();
                 }
             }
             
@@ -255,18 +249,37 @@ public class Customer_Menu implements Menu{
                     System.out.println("Invalid input. Please enter a number between 1 and " + totalBookNo + ": ");
                 }
             }
-            
-            
-
-            System.out.println("Input add or remove");
-
+            String addOrRemove;
+            while (true) {
+                System.out.println("input add or remove");
+                addOrRemove = scanner.nextLine();
+                if (addOrRemove != "add" && addOrRemove != "remove") {
+                    System.out.println("Invalid input. Please enter either \"add\" or \"remove\": ");
+                } else {
+                    break;
+                }
+            }
             System.out.println("Input the number: ");
+            preparedStatement = conn.prepareStatement(
+                "SELECT os.order_id, os.shipping_status, os.charge, os.customer_id, og.quantity FROM orders os JOIN ordering og ON os.order_id = og.order_id WHERE os.order_id = ?"
+            );
+            preparedStatement.setString(1, orderIDString);
+            resultSet = preparedStatement.executeQuery();
 
-            System.out.println("Update is ok!");
-
-            System.out.println("update is done!!");
-
-            System.out.println("updated charge");
+            while (true) {
+                try {
+                    Integer theNumber = Integer.parseInt(scanner.nextLine());
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number: ");
+                }
+            }
+            if (addOrRemove == "add") {
+                
+            } else {
+                
+            }
+            
 
             // Show new order details blah blah write methods later
         } catch (SQLException e) {
