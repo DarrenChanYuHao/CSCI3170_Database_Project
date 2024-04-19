@@ -15,6 +15,8 @@ public class Main_Menu implements Menu{
     // Attributes
     private Database db;
     private Connection conn;
+    private Date system_time;
+    private String system_time_string;
 
     // Constructor
     public Main_Menu(Database db, Connection conn) {
@@ -34,16 +36,21 @@ public class Main_Menu implements Menu{
         *    Output: None    
         */
 
-        // Dummy Date Variable
-        Date system_time;
-
-        system_time = getSystemDate();
+        // Get System Date from main
+        system_time = db.getSystemDate();
+        
+        if (system_time == null){
+            system_time_string = "0000-00-00";
+        }
+        else{
+            system_time_string = system_time.toString();
+        }
 
         String_Builder main_menu = new String_Builder.Build_String()
                 .setMenuName("Main_Menu")
                 .build();
 
-        System.out.println("The System Date is now:" + system_time);
+        System.out.println("The System Date is now:" + system_time_string);
         System.out.println(main_menu.getMajorMenuHeaders());
         System.out.println(main_menu.getMajorMenuOptionsList());
         choose_option();
@@ -69,6 +76,7 @@ public class Main_Menu implements Menu{
 
         Option_Handler optionHandler = new Option_Handler();
         int user_input = optionHandler.get_userinput_menu_options(5);
+        Main_Menu main_menu = new Main_Menu(this.db, this.conn);
 
         // Switch case for user input
         switch (user_input){
@@ -89,7 +97,8 @@ public class Main_Menu implements Menu{
                 break;
             case 4:
                 // Show System Date
-                getSystemDate();
+                System.out.println("The System Date is now: " + system_time_string);
+                main_menu.show_display();
                 break;
             case 5:
                 // Quit the system
@@ -100,13 +109,5 @@ public class Main_Menu implements Menu{
                 System.out.println("Invalid input. Please enter a number from 1 to 5.");
                 break;
         }
-    }
-
-    // Dummy Method for getting the system time
-    // TODO Main Menu 1: Replace with actual system time method
-    public Date getSystemDate(){
-        Date system_time = new Date(System.currentTimeMillis());
-
-        return system_time;
     }
 }

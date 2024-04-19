@@ -52,7 +52,6 @@ public class System_Menu implements Menu {
                 break;
             case 4:
                 setSystemDate();
-                break;
             case 5:
                 // Back to main menu
                 Main_Menu main_menu = new Main_Menu(this.db, this.conn);
@@ -97,7 +96,8 @@ public class System_Menu implements Menu {
         // TODO System Menu 4: Set System Date
         System.out.println("Please Input the date (YYYYMMDD) : ");
         // do some sort of read
-        // process input
+        String user_input = optionHandler.get_user_input_string("YYYYMMDD");
+        db.system_operations("setdate", user_input);
     }
 
 

@@ -121,6 +121,15 @@ public class Option_Handler {
             }
         }
 
+        if (Verify_Type.equals("YYYYMMDD")){
+
+            // The date format needs to use mini caps for the year due to the SimpleDateFormat class.
+            while (!date_format_checker(user_input, "yyyyMMdd")) {
+                System.out.println("Invalid input. Please enter a date in the format YYYYMMDD.");
+                user_input = choice_Scanner.nextLine();
+            }
+        }
+
         if (Verify_Type.equals("folder path")){
             while (!isValidPath(user_input)) {
                 System.out.println("Invalid input. Please enter a valid folder path.");
