@@ -247,7 +247,6 @@ public class Booksearch_SubMenu implements Menu {
             resultSet = preparedStatement.executeQuery();
             bookSearchOutput(resultSet, nextRecordCount);
         } catch (SQLException e) {
-            e.printStackTrace();
             SQLErrorMessage();
         }
     }

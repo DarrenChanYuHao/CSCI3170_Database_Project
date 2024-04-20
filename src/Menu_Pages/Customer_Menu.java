@@ -128,18 +128,26 @@ public class Customer_Menu implements Menu{
             //while loop variables
             Integer numberOfCopies;
             String orderedBooks = "";
-            LocalDate date;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String formattedDate;
             Double charge;
             Integer bookOrdersQuantity = 0;
             Integer newOrderID;
             String formattedNewOrderID;
             String bookOrdersISBN;
+            String currentOrderID;
+
+            preparedStatement = conn.prepareStatement(
+                "SELECT MAX(order_id) AS LargestOrderID FROM orders"
+            );
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            newOrderID = resultSet.getInt("LargestOrderID") + 1;
+            formattedNewOrderID = String.format("%08d", newOrderID);
 
             while(true) {
                 System.out.println("Please enter the book's ISBN: ");
                 bookOrdersISBN = scanner.nextLine();
+                
                 if (bookOrdersISBN.equals("F")) {
                     break;
                 } if (bookOrdersISBN.equals("L")) {
@@ -148,14 +156,6 @@ public class Customer_Menu implements Menu{
                     System.out.println(orderedBooks);
                     
                 } else {
-                    preparedStatement = conn.prepareStatement(
-                        "SELECT MAX(order_id) AS LargestOrderID FROM orders"
-                    );
-                    resultSet = preparedStatement.executeQuery();
-                    resultSet.next();
-                    newOrderID = resultSet.getInt("LargestOrderID") + 1;
-                    formattedNewOrderID = String.format("%08d", newOrderID);
-
                     preparedStatement = conn.prepareStatement(
                         "SELECT b.ISBN, b.title, b.no_of_copies, b.unit_price FROM book b WHERE b.ISBN = ?"
                     );
@@ -180,22 +180,80 @@ public class Customer_Menu implements Menu{
                             }
                         }
                         orderedBooks += "  " + bookOrdersQuantity;
-                        
-                        date = LocalDate.now();
-                        formattedDate = date.format(formatter);
 
                         charge = resultSet.getDouble("unit_price") * bookOrdersQuantity;
 
                         preparedStatement = conn.prepareStatement(
-                            "INSERT INTO orders (order_id, o_date, shipping_status, charge, customer_id) VALUES (?, ?, 'N', ?, ?)"
+                            "SELECT MAX(order_id) AS LargestOrderID FROM orders"
+                        );
+                        resultSet = preparedStatement.executeQuery();
+                        resultSet.next();
+                        currentOrderID = resultSet.getString("LargestOrderID");
+
+                        if (formattedNewOrderID.equals(currentOrderID)) {
+                            //find current charge and add the new charge
+                            preparedStatement = conn.prepareStatement(
+                                "SELECT charge FROM orders WHERE order_id = ?"
+                            );
+                            preparedStatement.setString(1, formattedNewOrderID);
+                            resultSet = preparedStatement.executeQuery();
+                            resultSet.next();
+
+                            charge += resultSet.getDouble("charge");
+                            
+                            preparedStatement = conn.prepareStatement(
+                                "UPDATE orders SET charge = ? WHERE order_id = ?"
+                            );
+                            preparedStatement.setDouble(1, charge);
+                            preparedStatement.setString(2, formattedNewOrderID);
+                            resultSet = preparedStatement.executeQuery();
+                            
+                        } else {
+                            preparedStatement = conn.prepareStatement(
+                                "INSERT INTO orders (order_id, o_date, shipping_status, charge, customer_id) VALUES (?, ?, 'N', ?, ?)"
+                            );
+                            preparedStatement.setString(1, formattedNewOrderID);
+                            preparedStatement.setDate(2, db.getSystemDate());
+                            preparedStatement.setDouble(3, charge);
+                            preparedStatement.setString(4, customerID);
+                            resultSet = preparedStatement.executeQuery();
+
+                        }
+
+                        //if under the same orderid, the same book isbn already exists, append the quantity
+                        preparedStatement = conn.prepareStatement(
+                            "SELECT quantity FROM ordering WHERE order_id = ? AND ISBN = ?"
                         );
                         preparedStatement.setString(1, formattedNewOrderID);
-                        preparedStatement.setDate(2, Date.valueOf(formattedDate));
-                        preparedStatement.setDouble(3, charge);
-                        preparedStatement.setString(4, customerID);
+                        preparedStatement.setString(2, bookOrdersISBN);
                         resultSet = preparedStatement.executeQuery();
+                        if (resultSet.next()) {
+                            preparedStatement = conn.prepareStatement(
+                                "UPDATE ordering SET quantity = ? WHERE order_id = ? AND ISBN = ?"
+                            );
+                            preparedStatement.setInt(1, resultSet.getInt("quantity") + bookOrdersQuantity);
+                            preparedStatement.setString(2, formattedNewOrderID);
+                            preparedStatement.setString(3, bookOrdersISBN);
+                            resultSet = preparedStatement.executeQuery();
+                        } else {
+                            preparedStatement = conn.prepareStatement(
+                                "INSERT INTO ordering (order_id, ISBN, quantity) VALUES (?, ?, ?)"
+                            );
+                            preparedStatement.setString(1, formattedNewOrderID);
+                            preparedStatement.setString(2, bookOrdersISBN);
+                            preparedStatement.setInt(3, bookOrdersQuantity);
+                            resultSet = preparedStatement.executeQuery();
+                        }
+
+                        preparedStatement = conn.prepareStatement(
+                            "UPDATE book SET no_of_copies = ? WHERE ISBN = ?"
+                        );
+                        preparedStatement.setInt(1, numberOfCopies - bookOrdersQuantity);
+                        preparedStatement.setString(2, bookOrdersISBN);
+                        resultSet = preparedStatement.executeQuery();
+
                     } else {
-                        System.out.println("Book not found.");
+                        System.out.print("Book not found. ");
                     }
                 }
                 
