@@ -1,4 +1,3 @@
-<h1>Read Me<\h1>
 This is the repo for Chinese University of Hong Kong CSCI3170 Database Project 2024.
 
 This project is completed by:  
