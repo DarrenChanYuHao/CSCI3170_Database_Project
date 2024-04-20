@@ -37,24 +37,7 @@ public class BookAuthor_Model implements Entity_Model_Interface{
             pstmt.execute();
             
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         }
-    }
-    @Override
-    public void updateinDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateinDatabase'");
-    }
-
-    @Override
-    public void readfromDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readfromDatabase'");
-    }
-
-    @Override
-    public void deleteinDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteinDatabase'");
     }
 }

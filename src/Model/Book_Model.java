@@ -61,26 +61,8 @@ public class Book_Model implements Entity_Model_Interface{
                 pstmt.setInt(4, this.number_of_copies);
                 pstmt.execute();
             } catch (Exception e) {
-                // TODO: handle exception
+                System.out.println("Error Code: " + e.getMessage());
             }
 
         }
-
-    @Override
-    public void updateinDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateinDatabase'");
-    }
-
-    @Override
-    public void readfromDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readfromDatabase'");
-    }
-
-    @Override
-    public void deleteinDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteinDatabase'");
-    }
 }

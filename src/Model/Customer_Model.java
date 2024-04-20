@@ -65,23 +65,4 @@ public class Customer_Model implements Entity_Model_Interface{
             }
 
         }
-
-    @Override
-    public void updateinDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateinDatabase'");
-    }
-
-    @Override
-    public void readfromDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'readfromDatabase'");
-    }
-
-    @Override
-    public void deleteinDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteinDatabase'");
-    }
-
 }

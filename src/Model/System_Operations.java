@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class System_Operations {
@@ -68,6 +69,16 @@ public class System_Operations {
                 List<String> FileLines = readLinesfromFile(filePath);
                 String entityType = getEntityTypesfromLine(FileLines.get(0));
                 
+                // Check data is in the correct format
+                Boolean valid_contents = false;
+
+                valid_contents = checkContentsFromLine(FileLines, entityType);
+
+                if (!valid_contents) {
+                    System.out.println("Invalid data format.");
+                    return;
+                }
+
                 for (String line : FileLines) {
                     List<String> data = getDatafromLine(line);
 
@@ -102,10 +113,10 @@ public class System_Operations {
 
             }
             System.out.println("Data successfully inserted.");
+            System.out.println("Data is loaded!");
             // Insert data into the SQL database
         }
         catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             System.out.println("Please check the error code for more information");
         }
@@ -169,5 +180,139 @@ public class System_Operations {
         // Get Data from Line
         List<String> data = List.of(line.split("\\|"));
         return data;
+    }
+
+    public boolean checkContentsFromLine(List<String> lines, String entityType) {
+        // Check Contents from Line
+        for (String line : lines) {
+            List<String> data = getDatafromLine(line);
+            switch (entityType) {
+                case "book":
+                    // Check that it is in ISBN format
+                    if (data.get(0).length() != 13) {
+                        System.out.println("Invalid data format for book for ISBN.");
+                        return false;
+                    }
+
+                    // Check that the title does not contain % and _
+                    if (data.get(1).contains("%") || data.get(1).contains("_")) {
+                        System.out.println("Invalid data format for book for title.");
+                        return false;
+                    }
+
+                    // Check that the unit price is a number
+                    try {
+                        Integer.parseInt(data.get(2));
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid data format for book for unit price.");
+                        return false;
+                    }
+
+                    // Check that the number of copies is a number
+                    try {
+                        Integer.parseInt(data.get(3));
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid data format for book for number of copeis.");
+                        return false;
+                    }
+                    break;
+                case "customers":
+                    // Check that the customer ID is not longer than 10 characters
+                    if (data.get(0).length() > 10) {
+                        System.out.println("Invalid data format for customers for customer ID.");
+                        return false;
+                    }
+
+                    // Check that the name does not contain % and _
+                    if (data.get(1).contains("%") || data.get(1).contains("_")) {
+                        System.out.println("Invalid data format for customers for customer name.");
+                        return false;
+                    }
+
+                    // Check that the address does not contain % and _
+                    if (data.get(2).contains("%") || data.get(2).contains("_")) {
+                        System.out.println("Invalid data format for customers or shipping address.");
+                        return false;
+                    }
+
+                    // Check that the credit card number is not longer than 19 characters
+                    if (data.get(3).length() > 19) {
+                        System.out.println("Invalid data format for customers for credit card number.");
+                        return false;
+                    }
+                    break;
+                case "orders":
+                    // Check that the order ID is not longer than 8 characters
+                    if (data.get(0).length() > 8) {
+                        System.out.println("Invalid data format for orders for order ID.");
+                        return false;
+                    }
+
+                    // Check that the date is in the format yyyy-mm-dd
+                    while (!Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", data.get(1))) {
+                        System.out.println("Invalid data format for orders for date.");
+                        return false;
+                    }
+
+                    // Check that shipping status is either Y or N
+                    if (!data.get(2).equals("Y") && !data.get(2).equals("N")) {
+                        System.out.println("Invalid data format for orders for shipping status.");
+                        return false;
+                    }
+
+                    // Check that the charge is a number
+                    try {
+                        Integer.parseInt(data.get(3));
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid data format for orders for charge.");
+                        return false;
+                    }
+
+                    // Check that the customer ID is not longer than 10 characters
+                    if (data.get(4).length() > 10) {
+                        System.out.println("Invalid data format for orders for customer ID.");
+                        return false;
+                    }
+                    break;
+                case "ordering":
+                    // Check that the order ID is not longer than 8 characters
+                    if (data.get(0).length() > 8) {
+                        System.out.println("Invalid data format for ordering for order ID.");
+                        return false;
+                    }
+
+                    // Check that the ISBN is not longer than 13 characters
+                    if (data.get(1).length() != 13) {
+                        System.out.println("Invalid data format for ordering for ISBN.");
+                        return false;
+                    }
+
+                    // Check it is in the ISBN format
+                    // x-xxxx-xxxx-x
+                    while (!Pattern.matches("[0-9]{1}-[0-9]{4}-[0-9]{4}-[0-9]{1}", data.get(1))) {
+                        System.out.println("Invalid data format for ordering for ISBN.");
+                        return false;
+                    }
+
+                    // Check that the quantity is a number
+                    try {
+                        Integer.parseInt(data.get(2));
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid data format for ordering for quantity.");
+                        return false;
+                    }
+                    break;
+                case "book_author":
+                    if (data.size() != 2) {
+                        System.out.println("Invalid data format for book_author.");
+                        return false;
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid entity type.");
+                    return false;
+            }
+        }
+        return true;
     }
 }

@@ -2,8 +2,6 @@ package Model;
 
 import java.sql.*;
 
-import oracle.net.aso.e;
-
 public class Database {
 /*
  * This class is to be used for all database operations.
