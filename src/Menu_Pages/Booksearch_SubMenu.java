@@ -216,29 +216,38 @@ public class Booksearch_SubMenu implements Menu {
             Integer nextRecordCount = bookSearchOutput(resultSet, 0);
 
             preparedStatement = conn.prepareStatement(
-                "SELECT DISTINCT b.ISBN FROM book b JOIN book_author a ON b.ISBN = a.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name = ? )"
+                "SELECT DISTINCT b.ISBN FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name = ? )"
             );
             preparedStatement.setString(1, cleanAuthorNameString);
             resultSet = preparedStatement.executeQuery();
 
-            String isbnToExclude = "(";
-            if (resultSet.next()) {
-                isbnToExclude += resultSet.getString("ISBN");
+            String isbnToExclude = "";
+            if(!resultSet.next()) {
+                preparedStatement = conn.prepareStatement(
+                    "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name LIKE ? ) ORDER BY b.title ASC, b.ISBN ASC, a.author_name ASC"
+                );
+                preparedStatement.setString(1, authorName);
+                resultSet = preparedStatement.executeQuery();
+                bookSearchOutput(resultSet, nextRecordCount);
+                return;
             }
-            while (resultSet.next()) {
-                isbnToExclude += ", ";
+            else {
                 isbnToExclude += resultSet.getString("ISBN");
+                while (resultSet.next()) {
+                    isbnToExclude += "\', ";
+                    isbnToExclude += "\'" + resultSet.getString("ISBN");
+                }
             }
-            isbnToExclude += ")";
+            //System.out.println(isbnToExclude);
 
             preparedStatement = conn.prepareStatement(
-                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name LIKE ? ) AND b.ISBN NOT IN ? ORDER BY b.title ASC, b.ISBN ASC, a.author_name ASC"
+                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name LIKE ? ) AND b.ISBN NOT IN (\'" + isbnToExclude + "\') ORDER BY b.title ASC, b.ISBN ASC, a.author_name ASC"
             );
             preparedStatement.setString(1, authorName);
-            preparedStatement.setString(2, isbnToExclude);
             resultSet = preparedStatement.executeQuery();
             bookSearchOutput(resultSet, nextRecordCount);
         } catch (SQLException e) {
+            e.printStackTrace();
             SQLErrorMessage();
         }
     }

@@ -212,7 +212,7 @@ public class Customer_Menu implements Menu{
         while (true) {    
             addOrRemove = scanner.nextLine();
             //System.out.println("(" + addOrRemove + ")");
-            if (addOrRemove.equals("add") && addOrRemove.equals("remove")) {
+            if (!addOrRemove.equals("add") && !addOrRemove.equals("remove")) {
                 System.out.println("Invalid input. Please enter either \"add\" or \"remove\": ");
             } else {
                 break;
@@ -329,7 +329,7 @@ public class Customer_Menu implements Menu{
                 theNumber = requestTheNumber(no_of_copies);
                 
                 if (addOrRemove.equals("add")) {
-                    if (theNumber >= no_of_copies) {
+                    if (theNumber > no_of_copies) {
                         System.out.println("Number exceeds the available book copies. Book only has " + no_of_copies + ".");
                         continue;
                     }
@@ -368,7 +368,7 @@ public class Customer_Menu implements Menu{
                     preparedStatement3.executeQuery();
                     
                 } else if (addOrRemove.equals("remove")){
-                    if (theNumber >= resultSet2.getInt("quantity")) {
+                    if (theNumber > resultSet2.getInt("quantity")) {
                         System.out.println("Number exceeds the total ordered book copies. Book only has " + resultSet2.getInt("quantity") + ".");
                         continue;
                     }
