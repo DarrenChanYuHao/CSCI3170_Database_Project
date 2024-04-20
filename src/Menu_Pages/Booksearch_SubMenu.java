@@ -72,6 +72,10 @@ public class Booksearch_SubMenu implements Menu {
         }
     }
 
+    public void SQLErrorMessage() {
+        System.out.println("Data either does not exist or is inaccessible, please check the SQL error code for more information");
+    }
+
     private void bookSearchOutput(ResultSet resultSet) {
         try {
             String currentISBN = "";
@@ -96,7 +100,7 @@ public class Booksearch_SubMenu implements Menu {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLErrorMessage();
         }
     }
     
@@ -132,7 +136,7 @@ public class Booksearch_SubMenu implements Menu {
             //Output Book Information
             bookSearchOutput(resultSet);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLErrorMessage();
         }
     }
 
@@ -171,7 +175,7 @@ public class Booksearch_SubMenu implements Menu {
             //Output Book Information
             bookSearchOutput(resultSet);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLErrorMessage();
         }
     }
 
@@ -210,7 +214,7 @@ public class Booksearch_SubMenu implements Menu {
             //Output Book Information
             bookSearchOutput(resultSet);
         } catch (SQLException e) {
-            e.printStackTrace();
+            SQLErrorMessage();
         }
     }
 }
