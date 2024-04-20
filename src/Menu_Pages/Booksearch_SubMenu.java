@@ -76,10 +76,10 @@ public class Booksearch_SubMenu implements Menu {
         System.out.println("Data either does not exist or is inaccessible, please check the SQL error code for more information");
     }
 
-    private void bookSearchOutput(ResultSet resultSet) {
+    private Integer bookSearchOutput(ResultSet resultSet, Integer recordCount) {
         try {
             String currentISBN = "";
-            Integer recordCount = 0;
+            
             Integer authorCount = 0;
             while (resultSet.next()) {
                 if(currentISBN.equals(resultSet.getString("ISBN"))) {
@@ -99,9 +99,11 @@ public class Booksearch_SubMenu implements Menu {
                     System.out.println(authorCount + " :" + resultSet.getString("author_name"));
                 }
             }
+            return recordCount;
         } catch (SQLException e) {
             SQLErrorMessage();
         }
+        return 0;
     }
     
     private void isbnSearch(){
@@ -134,7 +136,7 @@ public class Booksearch_SubMenu implements Menu {
             resultSet = preparedStatement.executeQuery();
             
             //Output Book Information
-            bookSearchOutput(resultSet);
+            bookSearchOutput(resultSet, 0);
         } catch (SQLException e) {
             SQLErrorMessage();
         }
@@ -173,7 +175,7 @@ public class Booksearch_SubMenu implements Menu {
             resultSet = preparedStatement.executeQuery();
             
             //Output Book Information
-            bookSearchOutput(resultSet);
+            bookSearchOutput(resultSet, 0);
         } catch (SQLException e) {
             SQLErrorMessage();
         }
@@ -205,14 +207,37 @@ public class Booksearch_SubMenu implements Menu {
 
             //Extract Book Information
             preparedStatement = conn.prepareStatement(
-                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name LIKE ? ) ORDER BY CASE WHEN a.author_name = ? THEN 0 ELSE 1 END, b.title ASC, b.ISBN ASC, a.author_name ASC"
+                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name = ? ) ORDER BY b.title ASC, b.ISBN ASC, a.author_name ASC"
             );
-            preparedStatement.setString(1, authorName);
-            preparedStatement.setString(2, cleanAuthorNameString);
+            preparedStatement.setString(1, cleanAuthorNameString);
             resultSet = preparedStatement.executeQuery();
             
             //Output Book Information
-            bookSearchOutput(resultSet);
+            Integer nextRecordCount = bookSearchOutput(resultSet, 0);
+
+            preparedStatement = conn.prepareStatement(
+                "SELECT DISTINCT b.ISBN FROM book b JOIN book_author a ON b.ISBN = a.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name = ? )"
+            );
+            preparedStatement.setString(1, cleanAuthorNameString);
+            resultSet = preparedStatement.executeQuery();
+
+            String isbnToExclude = "(";
+            if (resultSet.next()) {
+                isbnToExclude += resultSet.getString("ISBN");
+            }
+            while (resultSet.next()) {
+                isbnToExclude += ", ";
+                isbnToExclude += resultSet.getString("ISBN");
+            }
+            isbnToExclude += ")";
+
+            preparedStatement = conn.prepareStatement(
+                "SELECT b.ISBN, b.title, b.unit_price, b.no_of_copies, a.author_name FROM book b JOIN book_author a ON b.ISBN = a.ISBN WHERE b.ISBN IN ( SELECT ISBN FROM book_author WHERE author_name LIKE ? ) AND b.ISBN NOT IN ? ORDER BY b.title ASC, b.ISBN ASC, a.author_name ASC"
+            );
+            preparedStatement.setString(1, authorName);
+            preparedStatement.setString(2, isbnToExclude);
+            resultSet = preparedStatement.executeQuery();
+            bookSearchOutput(resultSet, nextRecordCount);
         } catch (SQLException e) {
             SQLErrorMessage();
         }
