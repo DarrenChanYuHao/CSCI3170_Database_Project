@@ -51,4 +51,23 @@ public class Ordering_model implements Entity_Model_Interface{
         } catch (Exception e) {
             e.printStackTrace();}
     }
+
+    @Override
+    public boolean checkExistinDatabase(Connection conn) {
+        // Check if the ordering exists in the database
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("select * from ordering where order_id = ? and isbn = ?");
+            pstmt.setString(1, this.order_id);
+            pstmt.setString(2, this.isbn);
+            pstmt.execute();
+
+            if (pstmt.getResultSet().next()) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

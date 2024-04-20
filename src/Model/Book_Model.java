@@ -65,4 +65,24 @@ public class Book_Model implements Entity_Model_Interface{
             }
 
         }
+
+    @Override
+    public boolean checkExistinDatabase(Connection conn) {
+        // Check if book exists in database
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("select * from book where isbn = ?");
+            pstmt.setString(1, this.isbn);
+            pstmt.execute();
+
+            if(pstmt.getResultSet().next()) {
+                System.out.println("Book already exists in the database");
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Error Code: " + e.getMessage());
+        }
+        return false;
+    }
 }

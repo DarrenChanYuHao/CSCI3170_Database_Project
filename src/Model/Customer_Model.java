@@ -65,4 +65,21 @@ public class Customer_Model implements Entity_Model_Interface{
             }
 
         }
+    
+    @Override
+    public boolean checkExistinDatabase(Connection conn) {
+        // Check if the customer exists in the database
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("select * from customer where customer_id = ?");
+            pstmt.setString(1, this.customer_id);
+            pstmt.execute();
+
+            if (pstmt.getResultSet().next()) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+        }
+        return false;
+    }
 }

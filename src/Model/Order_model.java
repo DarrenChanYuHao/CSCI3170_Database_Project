@@ -76,4 +76,21 @@ public class Order_model implements Entity_Model_Interface{
         }
 
     }
+
+    @Override
+    public boolean checkExistinDatabase(Connection conn) {
+        // Check if the order exists in the database
+        try {
+            PreparedStatement pstmt = conn.prepareStatement("select * from orders where order_id = ?");
+            pstmt.setString(1, this.order_id);
+            pstmt.execute();
+
+            if (pstmt.getResultSet().next()) {
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            }
+        return false;
+    }
 }
