@@ -169,11 +169,11 @@ public class Customer_Menu implements Menu{
                         while (true) {
                             try {
                                 bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
-                                while (bookOrdersQuantity < 1 || bookOrdersQuantity > numberOfCopies) {
+                                if (bookOrdersQuantity < 1 || bookOrdersQuantity > numberOfCopies) {
                                     System.out.println("Invalid quantity. Please enter a quantity between 1 and " + numberOfCopies + ": ");
-                                    bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
+                                } else {
+                                    break;
                                 }
-                                break;
                             } catch (NumberFormatException e) {
                                 System.out.println("Invalid quantity. Please enter a quantity between 1 and " + numberOfCopies + ": ");
                                 bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
