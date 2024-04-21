@@ -174,7 +174,6 @@ public class Customer_Menu implements Menu{
                                 } else {
                                     break;
                                 }
-                                break;
                             } catch (NumberFormatException e) {
                                 System.out.println("Invalid quantity. Please enter a quantity between 1 and " + numberOfCopies + ": ");
                                 bookOrdersQuantity = Integer.parseInt(scanner.nextLine());
