@@ -86,6 +86,7 @@ public class Order_model implements Entity_Model_Interface{
             pstmt.execute();
 
             if (pstmt.getResultSet().next()) {
+                System.out.println("Order already exists in the database");
                 return true;
             }
             return false;

@@ -62,6 +62,7 @@ public class Ordering_model implements Entity_Model_Interface{
             pstmt.execute();
 
             if (pstmt.getResultSet().next()) {
+                System.out.println("Ordering already exists in the database");
                 return true;
             }
             return false;
