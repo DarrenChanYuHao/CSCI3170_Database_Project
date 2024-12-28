@@ -31,9 +31,16 @@ public class Database {
 
         // Load the Oracle JDBC driver
         try {
-            // Use this to test if your connections are working
             Class.forName("oracle.jdbc.driver.OracleDriver");
-            conn = DriverManager.getConnection("jdbc:oracle:thin:@//db18.cse.cuhk.edu.hk:1521/oradb.cse.cuhk.edu.hk","h006","RukjuArj");
+
+            // [Deprecated] The connection string here was for the CUHK Oracle Database
+            // conn = DriverManager.getConnection("jdbc:oracle:thin:@//db18.cse.cuhk.edu.hk:1521/oradb.cse.cuhk.edu.hk","h006","RukjuArj");
+
+            // To try this program, you should install Oracle Database and run it locally.
+            // You can do this by setting up as per instructions here:
+            // https://www.oracle.com/database/technologies/appdev/xe/quickstart.html
+            conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521/XE","system","Password123");
+
             System.out.println("Connected to Oracle Database");
             System.out.flush();
         }

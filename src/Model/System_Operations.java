@@ -32,6 +32,7 @@ public class System_Operations {
                 PreparedStatement pstmt =
                         conn.prepareStatement( "create table " + tableNames[i] + tableColumns[i] );
                 pstmt.execute();
+                System.out.println("Table " + tableNames[i] + " successfully created.");
             } 
             System.out.println("Table successfully created.");
         }
