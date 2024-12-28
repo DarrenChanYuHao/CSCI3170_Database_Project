@@ -5,11 +5,14 @@ Darren CHAN Yu Hao 1155216989
 MINH Nguyen 1155163035  
 MUI Chung Yin 1155163035  
 
-You may execute this project by simply running the Main.java found in the src folder.
+You may execute this project by running the Main.java found in the src folder.
 You should be able to run this program in any IDE (Tested in VSCode, Intellij IDEA)
 
-You should note that the database connection is connected to Darren's oracle account. Therefore, if you wish to change the database, please go to
-src->Model->Database.java and amend the path at line 35, including the username and password.
+You should note that the database connection is set to local. You will require an Oracle database for this to work.
+To amend the database connection details, go to:
+src->Model->Database.java and amend the path at line 42, including the username and password.
 
-You should also be connected to the CSE VPN prior to starting the program.
+You can download and setup an Oracle database for free from:
+[https://www.oracle.com/database/technologies/appdev/xe/quickstart.html](https://www.oracle.com/database/technologies/appdev/xe/quickstart.html)
 
+You can use a RDMS such as Dbeaver to view the data in the database.
